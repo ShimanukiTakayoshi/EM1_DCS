@@ -1645,7 +1645,7 @@ Public Class frmMain
 
     Public Sub Initialize()
         'frmMain 設定
-        Me.Width = 1024
+        Me.Width = 1800 '1024
         Me.Height = 405 '768
         Me.FormBorderStyle = FormBorderStyle.FixedSingle
         'dgvYield 設定
@@ -1699,9 +1699,9 @@ Public Class frmMain
         ItemName(34) = "CGL3"
         ItemName(35) = "CGR3"
         ItemName(36) = "TSO"
-        ItemName(37) = ""
-        ItemName(38) = ""
-        ItemName(39) = ""
+        ItemName(37) = "CR1"
+        ItemName(38) = "CR2"
+        ItemName(39) = "CR3"
         ItemName(40) = "No."
         ItemName(41) = "Date"
         ItemName(42) = "Time"
@@ -1717,7 +1717,7 @@ Public Class frmMain
         ItemName(52) = "CGL"
         ItemName(53) = "CGR"
         ItemName(54) = "TSO"
-        ItemName(55) = ""
+        ItemName(55) = "CR"
         ItemName(56) = ""
         ItemName(57) = ""
         ItemName(58) = ""
@@ -2066,7 +2066,7 @@ Public Class frmMain
     End Sub
 
     Private Sub mnuTotalDataSheetOpen_Click(sender As Object, e As EventArgs) Handles mnuTotalDataSheetOpen.Click
-        Me.Width = 1024
+        Me.Width = 1800 '1024
         Me.Height = 730 '768
     End Sub
 
