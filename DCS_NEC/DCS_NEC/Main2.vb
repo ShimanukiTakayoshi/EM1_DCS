@@ -29,7 +29,7 @@ Public Class frmMain
     Public FullTotalMeasCount(35) As Integer    '項目毎測定数
     Public FullPassMeasCount(35) As Integer     '項目毎良品数
     Public SumValue(35) As Double               '平均値算出用測定値総合計
-    Public TypeData(9, 25) As String            '各機種規格データ
+    Public TypeData(9, 29) As String            '各機種規格データ
     Public TypeCode As Integer                  '機種コード
     Public HistInitFlag1 As Boolean = False     '分布図1初期化済フラグ
     Public HistInitFlag2 As Boolean = False     '分布図2初期化済フラグ
@@ -64,6 +64,8 @@ Public Class frmMain
     Public LimCGHi As Single = 0    '収集該当機種CG上限規格値
     Public LimTOLo As Single = 0    '収集該当機種TO下限規格値
     Public LimTOHi As Single = 0    '収集該当機種TO上限規格値
+    Public LimCRLo As Single = 0    '収集該当機種CR下限規格値
+    Public LimCRHi As Single = 0    '収集該当機種CR上限規格値
 
     Public Const PlcDataAddress As Long = 11000                 'ｺﾝﾄﾛｰﾗﾘﾝｸ通信用DMｱﾄﾞﾚｽ データ有無
     Public Const LinkAddressPlcDataGetOk As Long = 11998        'ｺﾝﾄﾛｰﾗﾘﾝｸ通信用DMｱﾄﾞﾚｽ PLC読込み許可フラグ
@@ -1244,6 +1246,8 @@ Public Class frmMain
         LimCGHi = CSng(TypeData(TypeCode, 19))
         LimTOLo = CSng(TypeData(TypeCode, 22))
         LimTOHi = CSng(TypeData(TypeCode, 23))
+        LimCRLo = CSng(TypeData(TypeCode, 26))
+        LimCRHi = CSng(TypeData(TypeCode, 27))
     End Sub
 
     Public Sub LoadPassword()
