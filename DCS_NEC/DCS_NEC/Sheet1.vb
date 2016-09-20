@@ -16,7 +16,7 @@
         ItemCv(11) = 25
         ItemCv(12) = 30
         ItemCv(13) = 31
-        ItemCv(14) = 0
+        ItemCv(14) = 37
         ItemCv(15) = 0
         ItemCv(16) = 0
         ItemCv(17) = 0
@@ -26,9 +26,9 @@
     End Sub
 
     Public Sub SheetInit1()
-        Me.Width = 635
+        Me.Width = 635 + 45
         Me.Height = 420
-        Sheet1.Width = 613
+        Sheet1.Width = 613 + 45
         Sheet1.Height = 342
         Me.FormBorderStyle = FormBorderStyle.FixedSingle
         If frmMain.Sheet1FirstFlag = True Then
@@ -42,6 +42,12 @@
                     j = j + 1
                 End If
             Next i
+            If frmMain.ItemCheck(40 + 15) = True Then
+                Sheet1.Columns.Add(Trim(Str(j)), frmMain.ItemName(frmMain.ItemSelect(40 + 15)))
+                Sheet1.Columns(j).DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+                Sheet1.Columns(j).Width = frmMain.ItemWidth(40 + 15)
+                j = j + 1
+            End If
             For i As Integer = 0 To 99
                 Sheet1.Rows.Add("")
             Next
@@ -70,7 +76,7 @@
         'シート表示
         For i As Integer = 1 To frmMain.StackCounter
             Dim k As Integer = 0
-            For j As Integer = 0 To 13
+            For j As Integer = 0 To 14
                 Dim sn As String
                 If frmMain.ItemCheck(40 + j) = True Then
                     Dim x As Integer = frmMain.ItemSelect(j)
@@ -89,6 +95,8 @@
                             If Val(sn) < frmMain.LimNCLo Or Val(sn) > frmMain.LimNCHi Then Sheet1.Item(k, i).Style.ForeColor = Color.Red
                         Case 12, 13
                             If Val(sn) < frmMain.LimCGLo Or Val(sn) > frmMain.LimCGHi Then Sheet1.Item(k, i).Style.ForeColor = Color.Red
+                        Case 14
+                            If Val(sn) < frmMain.LimCRLo Or Val(sn) > frmMain.LimCRHi Then Sheet1.Item(k, i).Style.ForeColor = Color.Red
                     End Select
                     k = k + 1
                 End If

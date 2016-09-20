@@ -65,14 +65,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="KYDCS_NEC.exe" size="241664">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="KYDCS_NEC.exe" size="242176">
       <assemblyIdentity name="KYDCS_NEC" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>YSK1TuDoW6qoBHoytmy1Qu4lQtHHSR8Ckbz8u5vwNMg=</dsig:DigestValue>
+        <dsig:DigestValue>ZD/qsmZ+2grF1WZH5R0KTDtJFwrITIVJ6OMqpFtwEq8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

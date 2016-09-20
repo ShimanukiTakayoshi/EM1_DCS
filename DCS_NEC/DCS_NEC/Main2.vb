@@ -240,7 +240,7 @@ Public Class frmMain
             Exit Sub
         End If
         'スタック変数へデータ転送
-        For i As Integer = 0 To 71
+        For i As Integer = 0 To 74
             StackData(StackCounter, i) = GetData(i)
         Next
         'データ保存
@@ -1093,8 +1093,10 @@ Public Class frmMain
                             If Val(sn) < LimNCLo Or Val(sn) > LimNCHi Then Sheet.Item(k, i).Style.ForeColor = Color.Red
                         Case 30 To 35
                             If Val(sn) < LimCGLo Or Val(sn) > LimCGHi Then Sheet.Item(k, i).Style.ForeColor = Color.Red
-                        Case 36, 37
+                        Case 36
                             If Val(sn) < LimTOLo Or Val(sn) > LimTOHi Then Sheet.Item(k, i).Style.ForeColor = Color.Red
+                        Case 37 To 39
+                            If Val(sn) < LimCRLo Or Val(sn) > LimCRHi Then Sheet.Item(k, i).Style.ForeColor = Color.Red
                     End Select
                     k = k + 1
                 End If
@@ -1103,7 +1105,7 @@ Public Class frmMain
         Sheet.ResumeLayout()
         Me.Sheet.ScrollBars = ScrollBars.Both
         For i As Integer = 1 To StackCounter
-            For j As Integer = 0 To 30
+            For j As Integer = 0 To 33
                 Dim ax As String = StackData(i, 40 + j)
                 Select Case ax
                     Case "OK"
@@ -1161,7 +1163,7 @@ Public Class frmMain
 
     Public Sub SaveData()
         Dim InputString As String = ""
-        For i As Integer = 0 To 36
+        For i As Integer = 0 To 39
             InputString = InputString + StackData(StackCounter, i) + ","
         Next
         InputString = InputString + Trim(Str(TypeCode)) + vbCrLf
@@ -1342,14 +1344,20 @@ Public Class frmMain
         For i = 30 To 35
             DummyData(i) = ColumnSetDecimal((DummyDataValu(0.08, 0.43)), 2)
         Next i
-        'No.36～37:[TSO ch3L/R]生成
+        'No.36:[TSO ch3]生成
         DummyData(36) = ColumnSetDecimal((DummyDataValu(2.5, 7.4)), 2)
-        DummyData(37) = ColumnSetDecimal((DummyDataValu(2.5, 7.4)), 2)
+        'No.37～39:[CR ch1～3]生成
+        DummyData(37) = ColumnSetDecimal((DummyDataValu(195, 255)), 1)
+        DummyData(38) = ColumnSetDecimal((DummyDataValu(195, 255)), 1)
+        DummyData(39) = ColumnSetDecimal((DummyDataValu(195, 255)), 1)
+        ''No.36～37:[TSO ch3L/R]生成
+        'DummyData(36) = ColumnSetDecimal((DummyDataValu(2.5, 7.4)), 2)
+        'DummyData(37) = ColumnSetDecimal((DummyDataValu(2.5, 7.4)), 2)
         'No.40～69:OK/NG
-        For i = 40 To 71
+        For i = 40 To 74
             DummyData(i) = DummyDataOkNg()
         Next
-        For i = 0 To 71
+        For i = 0 To 74
             GetData(i) = DummyData(i)
         Next
     End Sub
@@ -1660,7 +1668,7 @@ Public Class frmMain
         dgvData.Width = 385
         dgvData.Height = 181 + 16
         'Sheet 設定
-        Sheet.Width = 813 + 180
+        Sheet.Width = 813 + 180 + 660
         Sheet.Height = 295 + 64 - 32
         'picHist0 設定
         picHist0.Width = 411 + 192

@@ -154,7 +154,7 @@ Partial Class frmMain
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuS, Me.mnuV, Me.PLCPToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1008, 26)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1008, 24)
         Me.MenuStrip1.TabIndex = 12
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -162,144 +162,144 @@ Partial Class frmMain
         '
         Me.mnuS.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuSF, Me.mnuSP, Me.mnuST, Me.mnuSI, Me.mnuSJ, Me.mnuAlarmLevelSet, Me.mnuGouki, Me.mnuSE})
         Me.mnuS.Name = "mnuS"
-        Me.mnuS.Size = New System.Drawing.Size(62, 22)
+        Me.mnuS.Size = New System.Drawing.Size(61, 20)
         Me.mnuS.Text = "設定(&S)"
         '
         'mnuSF
         '
         Me.mnuSF.Name = "mnuSF"
-        Me.mnuSF.Size = New System.Drawing.Size(211, 22)
+        Me.mnuSF.Size = New System.Drawing.Size(200, 22)
         Me.mnuSF.Text = "保存先フォルダ(&F)"
         '
         'mnuSP
         '
         Me.mnuSP.Name = "mnuSP"
-        Me.mnuSP.Size = New System.Drawing.Size(211, 22)
+        Me.mnuSP.Size = New System.Drawing.Size(200, 22)
         Me.mnuSP.Text = "パスワード(&P)"
         '
         'mnuST
         '
         Me.mnuST.Name = "mnuST"
-        Me.mnuST.Size = New System.Drawing.Size(211, 22)
+        Me.mnuST.Size = New System.Drawing.Size(200, 22)
         Me.mnuST.Text = "機種(&T)"
         '
         'mnuSI
         '
         Me.mnuSI.Name = "mnuSI"
-        Me.mnuSI.Size = New System.Drawing.Size(211, 22)
+        Me.mnuSI.Size = New System.Drawing.Size(200, 22)
         Me.mnuSI.Text = "機種情報(&I)"
         '
         'mnuSJ
         '
         Me.mnuSJ.Name = "mnuSJ"
-        Me.mnuSJ.Size = New System.Drawing.Size(211, 22)
+        Me.mnuSJ.Size = New System.Drawing.Size(200, 22)
         Me.mnuSJ.Text = "データシート表示項目(&J)"
         '
         'mnuAlarmLevelSet
         '
         Me.mnuAlarmLevelSet.Name = "mnuAlarmLevelSet"
-        Me.mnuAlarmLevelSet.Size = New System.Drawing.Size(211, 22)
+        Me.mnuAlarmLevelSet.Size = New System.Drawing.Size(200, 22)
         Me.mnuAlarmLevelSet.Text = "良品率異常ﾚﾍﾞﾙ設定(&Y)"
         '
         'mnuGouki
         '
         Me.mnuGouki.Name = "mnuGouki"
-        Me.mnuGouki.Size = New System.Drawing.Size(211, 22)
+        Me.mnuGouki.Size = New System.Drawing.Size(200, 22)
         Me.mnuGouki.Text = "生産ライン番号設定(&G)"
         '
         'mnuSE
         '
         Me.mnuSE.Name = "mnuSE"
-        Me.mnuSE.Size = New System.Drawing.Size(211, 22)
+        Me.mnuSE.Size = New System.Drawing.Size(200, 22)
         Me.mnuSE.Text = "終了(&E)"
         '
         'mnuV
         '
         Me.mnuV.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuVD, Me.mnuV1, Me.mnuV2, Me.mnuV3, Me.ToolStripMenuItem1, Me.mnuVC, Me.ToolStripMenuItem2, Me.mnuTotalDataSheetOpen, Me.mnuTotalDataSheetClose, Me.ToolStripMenuItem3, Me.mnuPlcMonitorOpen, Me.mnuPlcMonitorClose})
         Me.mnuV.Name = "mnuV"
-        Me.mnuV.Size = New System.Drawing.Size(62, 22)
+        Me.mnuV.Size = New System.Drawing.Size(61, 20)
         Me.mnuV.Text = "表示(&V)"
         '
         'mnuVD
         '
         Me.mnuVD.Name = "mnuVD"
-        Me.mnuVD.Size = New System.Drawing.Size(196, 22)
+        Me.mnuVD.Size = New System.Drawing.Size(194, 22)
         Me.mnuVD.Text = "データシート(&D)"
         '
         'mnuV1
         '
         Me.mnuV1.Name = "mnuV1"
-        Me.mnuV1.Size = New System.Drawing.Size(196, 22)
+        Me.mnuV1.Size = New System.Drawing.Size(194, 22)
         Me.mnuV1.Text = "ヒストグラム1(&1)"
         '
         'mnuV2
         '
         Me.mnuV2.Name = "mnuV2"
-        Me.mnuV2.Size = New System.Drawing.Size(196, 22)
+        Me.mnuV2.Size = New System.Drawing.Size(194, 22)
         Me.mnuV2.Text = "ヒストグラム2(&2)"
         '
         'mnuV3
         '
         Me.mnuV3.Name = "mnuV3"
-        Me.mnuV3.Size = New System.Drawing.Size(196, 22)
+        Me.mnuV3.Size = New System.Drawing.Size(194, 22)
         Me.mnuV3.Text = "ヒストグラム3(&3)"
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(193, 6)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(191, 6)
         '
         'mnuVC
         '
         Me.mnuVC.Name = "mnuVC"
-        Me.mnuVC.Size = New System.Drawing.Size(196, 22)
+        Me.mnuVC.Size = New System.Drawing.Size(194, 22)
         Me.mnuVC.Text = "データークリア(&C)"
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(193, 6)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(191, 6)
         '
         'mnuTotalDataSheetOpen
         '
         Me.mnuTotalDataSheetOpen.Name = "mnuTotalDataSheetOpen"
-        Me.mnuTotalDataSheetOpen.Size = New System.Drawing.Size(196, 22)
+        Me.mnuTotalDataSheetOpen.Size = New System.Drawing.Size(194, 22)
         Me.mnuTotalDataSheetOpen.Text = "ﾄｰﾀﾙﾃﾞｰﾀｼｰﾄ表示(&T)"
         '
         'mnuTotalDataSheetClose
         '
         Me.mnuTotalDataSheetClose.Name = "mnuTotalDataSheetClose"
-        Me.mnuTotalDataSheetClose.Size = New System.Drawing.Size(196, 22)
+        Me.mnuTotalDataSheetClose.Size = New System.Drawing.Size(194, 22)
         Me.mnuTotalDataSheetClose.Text = "ﾄｰﾀﾙﾃﾞｰﾀｼｰﾄ非表示(&X)"
         '
         'ToolStripMenuItem3
         '
         Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(193, 6)
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(191, 6)
         '
         'mnuPlcMonitorOpen
         '
         Me.mnuPlcMonitorOpen.Name = "mnuPlcMonitorOpen"
-        Me.mnuPlcMonitorOpen.Size = New System.Drawing.Size(196, 22)
+        Me.mnuPlcMonitorOpen.Size = New System.Drawing.Size(194, 22)
         Me.mnuPlcMonitorOpen.Text = "PLCﾓﾆﾀｰ表示(&P)"
         '
         'mnuPlcMonitorClose
         '
         Me.mnuPlcMonitorClose.Name = "mnuPlcMonitorClose"
-        Me.mnuPlcMonitorClose.Size = New System.Drawing.Size(196, 22)
+        Me.mnuPlcMonitorClose.Size = New System.Drawing.Size(194, 22)
         Me.mnuPlcMonitorClose.Text = "PLCﾓﾆﾀｰ非表示(&Z)"
         '
         'PLCPToolStripMenuItem
         '
         Me.PLCPToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnuBufferClear})
         Me.PLCPToolStripMenuItem.Name = "PLCPToolStripMenuItem"
-        Me.PLCPToolStripMenuItem.Size = New System.Drawing.Size(59, 22)
+        Me.PLCPToolStripMenuItem.Size = New System.Drawing.Size(58, 20)
         Me.PLCPToolStripMenuItem.Text = "PLC(&P)"
         '
         'mnuBufferClear
         '
         Me.mnuBufferClear.Name = "mnuBufferClear"
-        Me.mnuBufferClear.Size = New System.Drawing.Size(226, 22)
+        Me.mnuBufferClear.Size = New System.Drawing.Size(186, 22)
         Me.mnuBufferClear.Text = "バッファーデータクリア(&C)"
         '
         'txtType
