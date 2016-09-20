@@ -1,0 +1,31 @@
+C:\Users\Kyoei_Shimanuki\AppData\Local\Temporary Projects\Dcas_Prototype\bin\Debug\Dcas_Prototype.exe.config
+C:\Users\Kyoei_Shimanuki\AppData\Local\Temporary Projects\Dcas_Prototype\bin\Debug\Dcas_Prototype.exe
+C:\Users\Kyoei_Shimanuki\AppData\Local\Temporary Projects\Dcas_Prototype\bin\Debug\Dcas_Prototype.pdb
+C:\Users\Kyoei_Shimanuki\AppData\Local\Temporary Projects\Dcas_Prototype\bin\Debug\Dcas_Prototype.xml
+C:\Users\Kyoei_Shimanuki\AppData\Local\Temporary Projects\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmMain.resources
+C:\Users\Kyoei_Shimanuki\AppData\Local\Temporary Projects\Dcas_Prototype\obj\Debug\Dcas_Prototype.Resources.resources
+C:\Users\Kyoei_Shimanuki\AppData\Local\Temporary Projects\Dcas_Prototype\obj\Debug\Dcas_Prototype.vbproj.GenerateResource.Cache
+C:\Users\Kyoei_Shimanuki\AppData\Local\Temporary Projects\Dcas_Prototype\obj\Debug\Dcas_Prototype.exe
+C:\Users\Kyoei_Shimanuki\AppData\Local\Temporary Projects\Dcas_Prototype\obj\Debug\Dcas_Prototype.xml
+C:\Users\Kyoei_Shimanuki\AppData\Local\Temporary Projects\Dcas_Prototype\obj\Debug\Dcas_Prototype.pdb
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\bin\Debug\Dcas_Prototype.exe.config
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.exe
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.xml
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.pdb
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\bin\Debug\Dcas_Prototype.exe
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\bin\Debug\Dcas_Prototype.pdb
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\bin\Debug\Dcas_Prototype.xml
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmMain.resources
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.Resources.resources
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.vbproj.GenerateResource.Cache
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmSheetSetting.resources
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmTypeSetting.resources
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmDebug.resources
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmTypeSelect.resources
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmSheet1.resources
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmSheet2.resources
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmSheet3.resources
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmHist1.resources
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmHist2.resources
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmHist3.resources
+C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\Dcas_Prototype\Dcas_Prototype\obj\Debug\Dcas_Prototype.frmPassword.resources
