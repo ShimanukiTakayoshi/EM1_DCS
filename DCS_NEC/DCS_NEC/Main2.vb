@@ -313,6 +313,7 @@ Public Class frmMain
             .Items.Add("NC")
             .Items.Add("CG")
             .Items.Add("TS")
+            .Items.Add("CR")
         End With
         cbxItem0.Text = "OV"
         With cbxAve
@@ -1150,7 +1151,7 @@ Public Class frmMain
 
     Public Sub SaveTitle()
         Dim Title As String = ""
-        For i As Integer = 0 To 36
+        For i As Integer = 0 To 39
             Title = Title + ItemName(i) + ","
         Next
         Title = Title + "Type" + vbCrLf

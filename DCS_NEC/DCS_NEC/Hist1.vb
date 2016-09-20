@@ -26,6 +26,7 @@
                 .Items.Add("NC")
                 .Items.Add("CG")
                 .Items.Add("TS")
+                .Items.Add("CR")
             End With
             cbxItem1.Text = "OV"
             frmMain.HistInitFlag1 = True
