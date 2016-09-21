@@ -17,7 +17,7 @@
         ItemCv(12) = 34
         ItemCv(13) = 35
         ItemCv(14) = 36
-        ItemCv(15) = 0
+        ItemCv(15) = 39
         ItemCv(16) = 0
         ItemCv(17) = 0
         ItemCv(18) = 0
@@ -26,16 +26,16 @@
     End Sub
 
     Public Sub SheetInit3()
-        Me.Width = 635 + 40
+        Me.Width = 635 + 40 + 40
         Me.Height = 420
-        Sheet3.Width = 613 + 40
+        Sheet3.Width = 613 + 40 + 40
         Sheet3.Height = 342
         Me.FormBorderStyle = FormBorderStyle.FixedSingle
-        If frmMain.Sheet3FirstFlag = True Then
+        If frmMain.Sheet3FirstFlag Then
             Sheet3.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             Dim j As Integer = 0
-            For i As Integer = 0 To 19
-                If frmMain.ItemCheck(40 + i) = True Then
+            For i As Integer = 0 To 15
+                If frmMain.ItemCheck(40 + i) Then
                     Sheet3.Columns.Add(Trim(Str(j)), frmMain.ItemName(frmMain.ItemSelect(40 + i)))
                     Sheet3.Columns(j).DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
                     Sheet3.Columns(j).Width = frmMain.ItemWidth(40 + i)
@@ -55,7 +55,7 @@
     Public Sub DataSheet3()
         'Sheet3.Visible = False
         Sheet3.SuspendLayout()
-        If frmMain.Sheet3FirstFlag = True Then
+        If frmMain.Sheet3FirstFlag Then
             frmMain.DGVClear(Sheet3)
             SheetInit3()
             frmMain.Sheet3FirstFlag = False
@@ -72,7 +72,7 @@
             Dim k As Integer = 0
             For j As Integer = 0 To 19
                 Dim sn As String
-                If frmMain.ItemCheck(40 + j) = True Then
+                If frmMain.ItemCheck(40 + j) Then
                     Dim x As Integer = frmMain.ItemSelect(j)
                     Dim s As String = frmMain.StackData(1, 0)
                     sn = Trim(frmMain.StackData(i, ItemCv((frmMain.ItemSelect(40 + j)) - 40)))
@@ -91,8 +91,10 @@
                             If Val(sn) < frmMain.LimNCLo Or Val(sn) > frmMain.LimNCHi Then Sheet3.Item(k, i).Style.ForeColor = Color.Red
                         Case 12, 13
                             If Val(sn) < frmMain.LimCGLo Or Val(sn) > frmMain.LimCGHi Then Sheet3.Item(k, i).Style.ForeColor = Color.Red
-                        Case 14, 15
+                        Case 14
                             If Val(sn) < frmMain.LimTOLo Or Val(sn) > frmMain.LimTOHi Then Sheet3.Item(k, i).Style.ForeColor = Color.Red
+                        Case 15
+                            If Val(sn) < frmMain.LimCRLo Or Val(sn) > frmMain.LimCRHi Then Sheet3.Item(k, i).Style.ForeColor = Color.Red
                     End Select
                     k = k + 1
                 End If

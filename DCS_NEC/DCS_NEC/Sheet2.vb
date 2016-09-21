@@ -16,7 +16,7 @@
         ItemCv(11) = 27
         ItemCv(12) = 32
         ItemCv(13) = 33
-        ItemCv(14) = 0
+        ItemCv(14) = 38
         ItemCv(15) = 0
         ItemCv(16) = 0
         ItemCv(17) = 0
@@ -26,22 +26,27 @@
     End Sub
 
     Public Sub SheetInit2()
-        Me.Width = 635
+        Me.Width = 635 + 40
         Me.Height = 420
-        Sheet2.Width = 613
+        Sheet2.Width = 613 + 40
         Sheet2.Height = 342
         Me.FormBorderStyle = FormBorderStyle.FixedSingle
-        If frmMain.Sheet2FirstFlag = True Then
+        If frmMain.Sheet2FirstFlag Then
             Sheet2.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             Dim j As Integer = 0
             For i As Integer = 0 To 13
-                If frmMain.ItemCheck(40 + i) = True Then
+                If frmMain.ItemCheck(40 + i) Then
                     Sheet2.Columns.Add(Trim(Str(j)), frmMain.ItemName(frmMain.ItemSelect(40 + i)))
                     Sheet2.Columns(j).DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
                     Sheet2.Columns(j).Width = frmMain.ItemWidth(40 + i)
                     j = j + 1
                 End If
             Next i
+            If frmMain.ItemCheck(40 + 15) Then
+                Sheet2.Columns.Add(Trim(Str(j)), frmMain.ItemName(frmMain.ItemSelect(40 + 15)))
+                Sheet2.Columns(j).DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+                Sheet2.Columns(j).Width = frmMain.ItemWidth(40 + 15)
+            End If
             For i As Integer = 0 To 99
                 Sheet2.Rows.Add("")
             Next
@@ -55,7 +60,7 @@
     Public Sub DataSheet2()
         'Sheet2.Visible = False
         Sheet2.SuspendLayout()
-        If frmMain.Sheet2FirstFlag = True Then
+        If frmMain.Sheet2FirstFlag Then
             frmMain.DGVClear(Sheet2)
             SheetInit2()
             frmMain.Sheet2FirstFlag = False
@@ -70,9 +75,9 @@
         Sheet2.RowTemplate.Height = 10
         For i As Integer = 1 To frmMain.StackCounter
             Dim k As Integer = 0
-            For j As Integer = 0 To 13
+            For j As Integer = 0 To 14
                 Dim sn As String
-                If frmMain.ItemCheck(40 + j) = True Then
+                If frmMain.ItemCheck(40 + j) Then
                     Dim x As Integer = frmMain.ItemSelect(j)
                     Dim s As String = frmMain.StackData(1, 0)
                     sn = Trim(frmMain.StackData(i, ItemCv((frmMain.ItemSelect(40 + j)) - 40)))
@@ -89,6 +94,8 @@
                             If Val(sn) < frmMain.LimNCLo Or Val(sn) > frmMain.LimNCHi Then Sheet2.Item(k, i).Style.ForeColor = Color.Red
                         Case 12, 13
                             If Val(sn) < frmMain.LimCGLo Or Val(sn) > frmMain.LimCGHi Then Sheet2.Item(k, i).Style.ForeColor = Color.Red
+                        Case 14
+                            If Val(sn) < frmMain.LimCRLo Or Val(sn) > frmMain.LimCRHi Then Sheet2.Item(k, i).Style.ForeColor = Color.Red
                     End Select
                     k = k + 1
                 End If

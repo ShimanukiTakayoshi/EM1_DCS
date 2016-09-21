@@ -26,27 +26,26 @@
     End Sub
 
     Public Sub SheetInit1()
-        Me.Width = 635 + 45
+        Me.Width = 635 + 40
         Me.Height = 420
-        Sheet1.Width = 613 + 45
+        Sheet1.Width = 613 + 40
         Sheet1.Height = 342
         Me.FormBorderStyle = FormBorderStyle.FixedSingle
-        If frmMain.Sheet1FirstFlag = True Then
+        If frmMain.Sheet1FirstFlag Then
             Sheet1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             Dim j As Integer = 0
             For i As Integer = 0 To 13
-                If frmMain.ItemCheck(40 + i) = True Then
+                If frmMain.ItemCheck(40 + i) Then
                     Sheet1.Columns.Add(Trim(Str(j)), frmMain.ItemName(frmMain.ItemSelect(40 + i)))
                     Sheet1.Columns(j).DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
                     Sheet1.Columns(j).Width = frmMain.ItemWidth(40 + i)
                     j = j + 1
                 End If
             Next i
-            If frmMain.ItemCheck(40 + 15) = True Then
+            If frmMain.ItemCheck(40 + 15) Then
                 Sheet1.Columns.Add(Trim(Str(j)), frmMain.ItemName(frmMain.ItemSelect(40 + 15)))
                 Sheet1.Columns(j).DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
                 Sheet1.Columns(j).Width = frmMain.ItemWidth(40 + 15)
-                j = j + 1
             End If
             For i As Integer = 0 To 99
                 Sheet1.Rows.Add("")
@@ -60,7 +59,7 @@
 
     Public Sub DataSheet1()
         Sheet1.SuspendLayout()
-        If frmMain.Sheet1FirstFlag = True Then
+        If frmMain.Sheet1FirstFlag Then
             frmMain.DGVClear(Sheet1)
             SheetInit1()
             frmMain.Sheet1FirstFlag = False
@@ -78,7 +77,7 @@
             Dim k As Integer = 0
             For j As Integer = 0 To 14
                 Dim sn As String
-                If frmMain.ItemCheck(40 + j) = True Then
+                If frmMain.ItemCheck(40 + j) Then
                     Dim x As Integer = frmMain.ItemSelect(j)
                     Dim s As String = frmMain.StackData(1, 0)
                     sn = Trim(frmMain.StackData(i, ItemCv((frmMain.ItemSelect(40 + j)) - 40)))
