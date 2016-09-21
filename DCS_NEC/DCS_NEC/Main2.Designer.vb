@@ -99,7 +99,7 @@ Partial Class frmMain
         'Sheet
         '
         Me.Sheet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.Sheet.Location = New System.Drawing.Point(8, 367)
+        Me.Sheet.Location = New System.Drawing.Point(8, 383)
         Me.Sheet.Name = "Sheet"
         Me.Sheet.RowTemplate.Height = 21
         Me.Sheet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
@@ -348,7 +348,6 @@ Partial Class frmMain
         'timMain
         '
         Me.timMain.Enabled = True
-        Me.timMain.Interval = 500
         '
         'SysmacCJ1
         '

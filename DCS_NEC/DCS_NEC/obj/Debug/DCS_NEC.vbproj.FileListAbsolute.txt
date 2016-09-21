@@ -90,10 +90,11 @@ C:\Users\Kyoei_Shimanuki\Documents\Visual Studio 2012\Projects\DCS_NEC\DCS_NEC\o
 C:\Users\KyoeiDcs\Documents\Visual Studio 2012\Projects\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.frmGouki.resources
 C:\Users\kyoey\Documents\Visual Studio 2012\Projects\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.frmGouki.resources
 C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\bin\Debug\KYDCS_NEC.exe.config
-C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.exe
-C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.xml
-C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.pdb
-C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\DCS_NEC.vbprojResolveAssemblyReference.cache
+C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\bin\Debug\KYDCS_NEC.exe.manifest
+C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\bin\Debug\KYDCS_NEC.application
+C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\bin\Debug\KYDCS_NEC.exe
+C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\bin\Debug\KYDCS_NEC.pdb
+C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\bin\Debug\KYDCS_NEC.xml
 C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.frmGouki.resources
 C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.frmYieldColor.resources
 C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.frmHist1.resources
@@ -111,10 +112,8 @@ C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.frmSh
 C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.Resources.resources
 C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\DCS_NEC.vbproj.GenerateResource.Cache
 C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.exe.licenses
-C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\bin\Debug\KYDCS_NEC.exe.manifest
-C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\bin\Debug\KYDCS_NEC.application
-C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\bin\Debug\KYDCS_NEC.exe
-C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\bin\Debug\KYDCS_NEC.pdb
-C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\bin\Debug\KYDCS_NEC.xml
 C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.exe.manifest
 C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.application
+C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.exe
+C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.xml
+C:\Users\pc155-PC\Documents\st\EM1_DCS\DCS_NEC\DCS_NEC\obj\Debug\KYDCS_NEC.pdb

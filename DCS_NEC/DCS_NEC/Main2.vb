@@ -24,11 +24,11 @@ Public Class frmMain
     Public TotalCount(2) As Integer             'ch毎測定数
     Public PassCount(2) As Integer              'ch毎良品数
     'メイン画面項目別集計表
-    Public TotalMeasCount(35) As Integer        '項目毎測定数（直近100個）
-    Public PassMeasCount(35) As Integer         '項目毎良品数（直近100個）
-    Public FullTotalMeasCount(35) As Integer    '項目毎測定数
-    Public FullPassMeasCount(35) As Integer     '項目毎良品数
-    Public SumValue(35) As Double               '平均値算出用測定値総合計
+    Public TotalMeasCount(41) As Integer        '項目毎測定数（直近100個）
+    Public PassMeasCount(41) As Integer         '項目毎良品数（直近100個）
+    Public FullTotalMeasCount(41) As Integer    '項目毎測定数
+    Public FullPassMeasCount(41) As Integer     '項目毎良品数
+    Public SumValue(41) As Double               '平均値算出用測定値総合計
     Public TypeData(9, 29) As String            '各機種規格データ
     Public TypeCode As Integer                  '機種コード
     Public HistInitFlag1 As Boolean = False     '分布図1初期化済フラグ
@@ -683,7 +683,7 @@ Public Class frmMain
 
     Public Sub StackDataShift()
         For i As Integer = 1 To 100
-            For j As Integer = 0 To 72
+            For j As Integer = 0 To 73
                 StackData(i, j) = StackData(i + 1, j)
             Next
         Next
@@ -721,7 +721,8 @@ Public Class frmMain
             dgvData.Rows.Add("CG-L")
             dgvData.Rows.Add("CG-R")
             dgvData.Rows.Add("TSO")
-            For i As Integer = 0 To 10
+            dgvData.Rows.Add("CR")
+            For i As Integer = 0 To 11
                 dgvData.Rows(i).DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
                 dgvData.Rows(i).Height = 16
             Next i
@@ -739,66 +740,129 @@ Public Class frmMain
         Dim a8 As Double = 0
         Dim a9 As Double = 0
         Dim a10 As Double = 0
-        For i As Integer = 0 To 5
-            If i <> 5 Then
-                a1 = TotalMeasCount(i * 6) + TotalMeasCount(i * 6 + 2) + TotalMeasCount(i * 6 + 4)
-                a2 = TotalMeasCount(i * 6 + 1) + TotalMeasCount(i * 6 + 3) + TotalMeasCount(i * 6 + 5)
-                a3 = PassMeasCount(i * 6) + PassMeasCount(i * 6 + 2) + PassMeasCount(i * 6 + 4)
-                a4 = PassMeasCount(i * 6 + 1) + PassMeasCount(i * 6 + 3) + PassMeasCount(i * 6 + 5)
-                a5 = SumValue(i * 6) + SumValue(i * 6 + 2) + SumValue(i * 6 + 4)      'SumL
-                a6 = SumValue(i * 6 + 1) + SumValue(i * 6 + 3) + SumValue(i * 6 + 5)  'SumR
-                a7 = FullTotalMeasCount(i * 6) + FullTotalMeasCount(i * 6 + 2) + FullTotalMeasCount(i * 6 + 4)
-                a8 = FullTotalMeasCount(i * 6 + 1) + FullTotalMeasCount(i * 6 + 3) + FullTotalMeasCount(i * 6 + 5)
-                a9 = FullPassMeasCount(i * 6) + FullPassMeasCount(i * 6 + 2) + FullPassMeasCount(i * 6 + 4)
-                a10 = FullPassMeasCount(i * 6 + 1) + FullPassMeasCount(i * 6 + 3) + FullPassMeasCount(i * 6 + 5)
-            Else
-                a1 = TotalMeasCount(i * 6)
-                a2 = TotalMeasCount(i * 6 + 1)
-                a3 = PassMeasCount(i * 6)
-                a4 = PassMeasCount(i * 6 + 1)
-                a5 = SumValue(i * 6)
-                a6 = SumValue(i * 6 + 1)
-                a7 = FullTotalMeasCount(i * 6)
-                a8 = FullTotalMeasCount(i * 6 + 1)
-                a9 = FullPassMeasCount(i * 6)
-                a10 = FullPassMeasCount(i * 6 + 1)
-            End If
+        Dim YieldL As String = ""
+        Dim YieldR As String = ""
+        Dim AverageL As String = ""
+        Dim AverageR As String = ""
+        Dim SigmaL As String = ""
+        Dim SigmaR As String = ""
+
+        For i As Integer = 0 To 6
             Dim ll As Single = CSng(TypeData(TypeCode, i * 4 + 2))
             Dim hl As Single = CSng(TypeData(TypeCode, i * 4 + 3))
-            dgvData.Item(1, i * 2).Value = a7   'TotalCountL
-            dgvData.Item(2, i * 2).Value = a9   'PassCountL
-            If i <> 5 Then
-                dgvData.Item(1, i * 2 + 1).Value = a8   'TotalCountR
-                dgvData.Item(2, i * 2 + 1).Value = a10   'PassCountR
-            End If
+            'If i <> 5 Then
+            '    a1 = TotalMeasCount(i * 6) + TotalMeasCount(i * 6 + 2) + TotalMeasCount(i * 6 + 4)
+            '    a2 = TotalMeasCount(i * 6 + 1) + TotalMeasCount(i * 6 + 3) + TotalMeasCount(i * 6 + 5)
+            '    a3 = PassMeasCount(i * 6) + PassMeasCount(i * 6 + 2) + PassMeasCount(i * 6 + 4)
+            '    a4 = PassMeasCount(i * 6 + 1) + PassMeasCount(i * 6 + 3) + PassMeasCount(i * 6 + 5)
+            '    a5 = SumValue(i * 6) + SumValue(i * 6 + 2) + SumValue(i * 6 + 4)      'SumL
+            '    a6 = SumValue(i * 6 + 1) + SumValue(i * 6 + 3) + SumValue(i * 6 + 5)  'SumR
+            '    a7 = FullTotalMeasCount(i * 6) + FullTotalMeasCount(i * 6 + 2) + FullTotalMeasCount(i * 6 + 4)
+            '    a8 = FullTotalMeasCount(i * 6 + 1) + FullTotalMeasCount(i * 6 + 3) + FullTotalMeasCount(i * 6 + 5)
+            '    a9 = FullPassMeasCount(i * 6) + FullPassMeasCount(i * 6 + 2) + FullPassMeasCount(i * 6 + 4)
+            '    a10 = FullPassMeasCount(i * 6 + 1) + FullPassMeasCount(i * 6 + 3) + FullPassMeasCount(i * 6 + 5)
+            'Else
+            '    a1 = TotalMeasCount(i * 6)
+            '    a2 = TotalMeasCount(i * 6 + 1)
+            '    a3 = PassMeasCount(i * 6)
+            '    a4 = PassMeasCount(i * 6 + 1)
+            '    a5 = SumValue(i * 6)
+            '    a6 = SumValue(i * 6 + 1)
+            '    a7 = FullTotalMeasCount(i * 6)
+            '    a8 = FullTotalMeasCount(i * 6 + 1)
+            '    a9 = FullPassMeasCount(i * 6)
+            '    a10 = FullPassMeasCount(i * 6 + 1)
+            'End If
+            i = i
+            Select Case i
+                Case 5
+                    a1 = TotalMeasCount(30)
+                    a3 = PassMeasCount(30)
+                    a5 = SumValue(30)
+                    a7 = FullTotalMeasCount(30)
+                    a9 = FullPassMeasCount(30)
+                Case 6
+                    a1 = TotalMeasCount(31) + TotalMeasCount(32) + TotalMeasCount(33)
+                    a3 = PassMeasCount(31) + PassMeasCount(32) + PassMeasCount(33)
+                    a5 = SumValue(31) + SumValue(32) + SumValue(33)      'SumL
+                    a7 = FullTotalMeasCount(31) + FullTotalMeasCount(32) + FullTotalMeasCount(33)
+                    a9 = FullPassMeasCount(31) + FullPassMeasCount(32) + FullPassMeasCount(33)
+                Case Else
+                    a1 = TotalMeasCount(i * 6) + TotalMeasCount(i * 6 + 2) + TotalMeasCount(i * 6 + 4)
+                    a2 = TotalMeasCount(i * 6 + 1) + TotalMeasCount(i * 6 + 3) + TotalMeasCount(i * 6 + 5)
+                    a3 = PassMeasCount(i * 6) + PassMeasCount(i * 6 + 2) + PassMeasCount(i * 6 + 4)
+                    a4 = PassMeasCount(i * 6 + 1) + PassMeasCount(i * 6 + 3) + PassMeasCount(i * 6 + 5)
+                    a5 = SumValue(i * 6) + SumValue(i * 6 + 2) + SumValue(i * 6 + 4)      'SumL
+                    a6 = SumValue(i * 6 + 1) + SumValue(i * 6 + 3) + SumValue(i * 6 + 5)  'SumR
+                    a7 = FullTotalMeasCount(i * 6) + FullTotalMeasCount(i * 6 + 2) + FullTotalMeasCount(i * 6 + 4)
+                    a8 = FullTotalMeasCount(i * 6 + 1) + FullTotalMeasCount(i * 6 + 3) + FullTotalMeasCount(i * 6 + 5)
+                    a9 = FullPassMeasCount(i * 6) + FullPassMeasCount(i * 6 + 2) + FullPassMeasCount(i * 6 + 4)
+                    a10 = FullPassMeasCount(i * 6 + 1) + FullPassMeasCount(i * 6 + 3) + FullPassMeasCount(i * 6 + 5)
+            End Select
+            Select Case i
+                Case 5
+                    dgvData.Item(1, 10).Value = a7   'TotalCountL
+                    dgvData.Item(2, 10).Value = a9   'PassCountL
+                Case 6
+                    dgvData.Item(1, 11).Value = a7   'TotalCountL
+                    dgvData.Item(2, 11).Value = a9   'PassCountL
+                Case Else
+                    dgvData.Item(1, i * 2).Value = a7   'TotalCountL
+                    dgvData.Item(1, i * 2 + 1).Value = a8   'TotalCountR
+                    dgvData.Item(2, i * 2).Value = a9   'PassCountL
+                    dgvData.Item(2, i * 2 + 1).Value = a10   'PassCountR
+            End Select
             If a1 > 0 Then
-                dgvData.Item(3, i * 2).Value = ColumnSetDecimal(CSng(a3 / a1 * 100), 2)
+                'dgvData.Item(3, i * 2).Value = ColumnSetDecimal(CSng(a3 / a1 * 100), 2)
+                YieldL = ColumnSetDecimal(CSng(a3 / a1 * 100), 2)
                 If i <> 0 And i <> 1 Then
                     If i = 4 Then
                         Scnt = 0
                     End If
                     'Average
                     Dim ave As Single = CSng(a5 / a1)
-                    dgvData.Item(4, i * 2).Value = ColumnSetDecimal(CSng(ave), 2)
+                    AverageL = ColumnSetDecimal(CSng(ave), 2)
+                    'If i <> 6 Then
+                    '    dgvData.Item(4, i * 2).Value = ColumnSetDecimal(CSng(ave), 2)
+                    'Else
+                    '    dgvData.Item(4, 11).Value = ColumnSetDecimal(CSng(ave), 2)
+                    'End If
                     'Sigma
                     Dim Ssum As Double = 0
                     Scnt = 0
-                    For j As Integer = 1 To StackCounter
-                        If StackData(j, i * 6 + 0 + 40) = "OK" Or StackData(j, i * 6 + 0 + 40) = "NG" Then
-                            Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 0)) - ave) ^ 2
-                            Scnt += 1
-                        End If
-                        If StackData(j, i * 6 + 2 + 40) = "OK" Or StackData(j, i * 6 + 2 + 40) = "NG" Then
-                            Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 2)) - ave) ^ 2
-                            Scnt += 1
-                        End If
-                        If StackData(j, i * 6 + 4 + 40) = "OK" Or StackData(j, i * 6 + 4 + 40) = "NG" Then
-                            Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 4)) - ave) ^ 2
-                            Scnt += 1
-                        End If
-                    Next j
+                    If i <> 6 Then
+                        For j As Integer = 1 To StackCounter
+                            If StackData(j, i * 6 + 0 + 40) = "OK" Or StackData(j, i * 6 + 0 + 40) = "NG" Then
+                                Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 0)) - ave) ^ 2
+                                Scnt += 1
+                            End If
+                            If StackData(j, i * 6 + 2 + 40) = "OK" Or StackData(j, i * 6 + 2 + 40) = "NG" Then
+                                Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 2)) - ave) ^ 2
+                                Scnt += 1
+                            End If
+                            If StackData(j, i * 6 + 4 + 40) = "OK" Or StackData(j, i * 6 + 4 + 40) = "NG" Then
+                                Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 4)) - ave) ^ 2
+                                Scnt += 1
+                            End If
+                        Next j
+                    Else
+                        For j As Integer = 1 To StackCounter
+                            If StackData(j, 31 + 40) = "OK" Or StackData(j, 31 + 40) = "NG" Then
+                                Ssum = Ssum + (Val(StackData(j, 37)) - ave) ^ 2
+                                Scnt += 1
+                            End If
+                            If StackData(j, 32 + 40) = "OK" Or StackData(j, 32 + 40) = "NG" Then
+                                Ssum = Ssum + (Val(StackData(j, 38)) - ave) ^ 2
+                                Scnt += 1
+                            End If
+                            If StackData(j, 33 + 40) = "OK" Or StackData(j, 33 + 40) = "NG" Then
+                                Ssum = Ssum + (Val(StackData(j, 39)) - ave) ^ 2
+                                Scnt += 1
+                            End If
+                        Next j
+                    End If
                     Dim sigma As Single = CSng(Math.Sqrt(Ssum / Scnt))
-                    dgvData.Item(5, i * 2).Value = ColumnSetDecimal(CSng(sigma), 2)
+                    SigmaL = ColumnSetDecimal(CSng(sigma), 2)
                     'Cpk
                     dgvData.Item(6, i * 2).Value = ColumnSetDecimal(Cpk(ll, hl, ave, sigma), 2)
                 Else
@@ -830,7 +894,7 @@ Public Class frmMain
                     End If
                 End If
             End If
-            If a2 > 0 And i <> 5 Then
+            If a2 > 0 And i <> 5 And i <> 6 Then
                 dgvData.Item(3, i * 2 + 1).Value = ColumnSetDecimal(CSng(a4 / a2 * 100), 2)
                 If i <> 0 And i <> 1 Then
                     'Average
@@ -886,6 +950,16 @@ Public Class frmMain
                     End If
                 End If
             End If
+            'Select Case i
+            '    Case 6
+            '        dgvData.Item(3, 11).Value = YieldL
+            '        dgvData.Item(4, 11).Value = AverageL
+            '        dgvData.Item(5, 11).Value = SigmaL
+            '    Case Else
+            '        dgvData.Item(3, i * 2).Value = YieldL
+            '        'dgvData.Item(4, i * 2).Value = AverageL
+            '        dgvData.Item(5, i * 2).Value = SigmaL
+            'End Select
         Next
         '推移グラフ用平均データ取得
         For i As Integer = 6 To 37
@@ -919,13 +993,13 @@ Public Class frmMain
     End Sub
 
     Public Sub DataCalc2()
-        For i As Integer = 0 To 35
+        For i As Integer = 0 To 36
             TotalMeasCount(i) = 0
             PassMeasCount(i) = 0
             SumValue(i) = 0
         Next
         For i As Integer = 1 To StackCounter
-            For j As Integer = 0 To 35
+            For j As Integer = 0 To 36
                 If StackData(i, 40 + j) <> "--" Then
                     TotalMeasCount(j) += 1
                     If j <> 2 And j <> 3 And j <> 0 And j <> 1 And j <> 8 And j <> 9 And j <> 6 And j <> 7 Then
@@ -1313,53 +1387,74 @@ Public Class frmMain
         Minute = CInt(Rnd(1) * 60)
         Second = CInt(Rnd(1) * 60)
         DummyData(2) = ZeroPat(Str$(Hour), 2) + ":" + ZeroPat(Str$(Minute), 2) + ":" + ZeroPat(Str$(Second), 2)
-        'No.3～5：[判定ch1～3]生成
         Dim i As Integer
-        For i = 3 To 5
-            DummyData(i) = DummyDataJudge()
-        Next
+        'No.3～5：[判定ch1～3]生成
+        'For i = 3 To 5
+        '    DummyData(i) = DummyDataJudge()
+        'Next
         'No.6～9:[PV ch2～3L/R(OK/NG)]生成
         For i = 6 To 9
             DummyData(i) = DummyDataOkNg()
+            DummyData(40 + i - 6) = DummyData(i)
         Next i
         'No.10～11:[PV ch1L/R(実測値)]生成
-        DummyData(10) = ColumnSetDecimal((DummyDataValu(2.5, 7.4)), 2)
-        DummyData(11) = ColumnSetDecimal((DummyDataValu(2.5, 7.4)), 2)
+        DummyData(10) = ColumnSetDecimal((DummyDataValu(CSng(LimOVLo * 0.995), CSng(LimOVHi * 1.005))), 2)
+        DummyData(11) = ColumnSetDecimal((DummyDataValu(CSng(LimOVLo * 0.995), CSng(LimOVHi * 1.005))), 2)
+        If LimOVLo <= Val(DummyData(10)) And LimOVHi >= Val(DummyData(10)) Then DummyData(40 + 10 - 6) = "OK" Else DummyData(40 + 10 - 6) = "NG"
+        If LimOVLo <= Val(DummyData(11)) And LimOVHi >= Val(DummyData(11)) Then DummyData(40 + 11 - 6) = "OK" Else DummyData(40 + 11 - 6) = "NG"
         'No.12～15:[DV ch2～3L/R(OK/NG)]生成
         For i = 12 To 15
             DummyData(i) = DummyDataOkNg()
+            DummyData(40 + i - 6) = DummyData(i)
         Next i
         'No.16～17:[DV ch1L/R(実測値)]生成
-        DummyData(16) = ColumnSetDecimal((DummyDataValu(0.5, 5.3)), 2)
-        DummyData(17) = ColumnSetDecimal((DummyDataValu(0.5, 5.3)), 2)
+        DummyData(16) = ColumnSetDecimal((DummyDataValu(CSng(LimRVLo * 0.995), CSng(LimRVHi * 1.005))), 2)
+        DummyData(17) = ColumnSetDecimal((DummyDataValu(CSng(LimRVLo * 0.995), CSng(LimRVHi * 1.005))), 2)
+        If LimRVLo <= Val(DummyData(16)) And LimRVHi >= Val(DummyData(16)) Then DummyData(40 + 16 - 6) = "OK" Else DummyData(40 + 16 - 6) = "NG"
+        If LimRVLo <= Val(DummyData(17)) And LimRVHi >= Val(DummyData(17)) Then DummyData(40 + 17 - 6) = "OK" Else DummyData(40 + 17 - 6) = "NG"
         'No.18～23:[NOCP ch1～3L/R]生成
         For i = 18 To 23
-            DummyData(i) = ColumnSetDecimal((DummyDataValu(20, 54)), 2)
+            DummyData(i) = ColumnSetDecimal((DummyDataValu(CSng(LimNOLo * 0.995), CSng(LimNOHi * 1.005))), 2)
+            If LimNOLo <= Val(DummyData(i)) And LimNOHi >= Val(DummyData(i)) Then DummyData(40 + i - 6) = "OK" Else DummyData(40 + i - 6) = "NG"
         Next i
         'No.24～29:[NCCP ch1～3L/R]生成
         For i = 24 To 29
-            DummyData(i) = ColumnSetDecimal((DummyDataValu(8.5, 31.5)), 2)
+            DummyData(i) = ColumnSetDecimal((DummyDataValu(CSng(LimNCLo * 0.995), CSng(LimNCHi * 1.005))), 2)
+            If LimNCLo <= Val(DummyData(i)) And LimNCHi >= Val(DummyData(i)) Then DummyData(40 + i - 6) = "OK" Else DummyData(40 + i - 6) = "NG"
         Next i
         'No.30～35:[CG ch1～3L/R]生成
         For i = 30 To 35
-            DummyData(i) = ColumnSetDecimal((DummyDataValu(0.08, 0.43)), 2)
+            DummyData(i) = ColumnSetDecimal((DummyDataValu(CSng(LimCGLo * 0.995), CSng(LimCGHi * 1.005))), 2)
+            If LimCGLo <= Val(DummyData(i)) And LimCGHi >= Val(DummyData(i)) Then DummyData(40 + i - 6) = "OK" Else DummyData(40 + i - 6) = "NG"
         Next i
         'No.36:[TSO ch3]生成
-        DummyData(36) = ColumnSetDecimal((DummyDataValu(2.5, 7.4)), 2)
+        DummyData(36) = ColumnSetDecimal((DummyDataValu(CSng(LimTOHi * 0.95), CSng(LimTOHi * 1.002))), 2)
+        If LimTOLo <= Val(DummyData(36)) And LimTOHi >= Val(DummyData(36)) Then DummyData(40 + 36 - 6) = "OK" Else DummyData(40 + 36 - 6) = "NG"
         'No.37～39:[CR ch1～3]生成
-        DummyData(37) = ColumnSetDecimal((DummyDataValu(195, 255)), 1)
-        DummyData(38) = ColumnSetDecimal((DummyDataValu(195, 255)), 1)
-        DummyData(39) = ColumnSetDecimal((DummyDataValu(195, 255)), 1)
-        ''No.36～37:[TSO ch3L/R]生成
-        'DummyData(36) = ColumnSetDecimal((DummyDataValu(2.5, 7.4)), 2)
-        'DummyData(37) = ColumnSetDecimal((DummyDataValu(2.5, 7.4)), 2)
-        'No.40～69:OK/NG
-        For i = 40 To 74
-            DummyData(i) = DummyDataOkNg()
+        For i = 37 To 39
+            DummyData(i) = ColumnSetDecimal((DummyDataValu(CSng(LimCRLo * 0.995), CSng(LimCRHi * 1.005))), 1)
+            If LimCRLo <= Val(DummyData(i)) And LimCRHi >= Val(DummyData(i)) Then DummyData(40 + i - 6) = "OK" Else DummyData(40 + i - 6) = "NG"
+        Next i
+        'No.3～5：[判定ch1～3]生成
+        Dim judge As Boolean
+        For i = 0 To 2
+            DummyData(3 + i) = "Pass"
+            judge = True
+            For j As Integer = 0 To 4
+                If DummyData(40 + i * 2 + j * 6) = "NG" Or DummyData(40 + i * 2 + j * 6 + 1) = "NG" Then
+                    DummyData(3 + i) = "Fail"
+                    Exit For
+                End If
+            Next
         Next
-        For i = 0 To 74
+        If DummyData(70) = "NG" Then DummyData(5) = "Fail"
+        If DummyData(71) = "NG" Then DummyData(3) = "Fail"
+        If DummyData(72) = "NG" Then DummyData(4) = "Fail"
+        If DummyData(73) = "NG" Then DummyData(5) = "Fail"
+        For i = 0 To 73
             GetData(i) = DummyData(i)
         Next
+        i = i
     End Sub
 
     Public Function GetDummyData2() As String
@@ -1659,21 +1754,20 @@ Public Class frmMain
     Public Sub Initialize()
         'frmMain 設定
         Me.Width = 1800 '1024
-        Me.Height = 405 '768
+        Me.Height = 405 + 16 '768
         Me.FormBorderStyle = FormBorderStyle.FixedSingle
         'dgvYield 設定
         dgvYield.Width = 202
         dgvYield.Height = 85
         'dgvData 設定
         dgvData.Width = 385
-        dgvData.Height = 181 + 16
+        dgvData.Height = 181 + 16 + 16
         'Sheet 設定
         Sheet.Width = 813 + 180 + 660
         Sheet.Height = 295 + 64 - 32
         'picHist0 設定
         picHist0.Width = 411 + 192
-        picHist0.Height = 282 + 13
-
+        picHist0.Height = 282 + 13 + 16
         'データシートの項目名設定
         ItemName(0) = "No."
         ItemName(1) = "Date"
@@ -1764,7 +1858,7 @@ Public Class frmMain
 
     Public Function DummyDataOkNg() As String
         'ダミーデータ「OK/NG」生成
-        Dim a As Integer = CInt(Rnd(1) * 30)
+        Dim a As Integer = CInt(Rnd(1) * 100)
         Select Case a
             Case 0
                 DummyDataOkNg = "--"
