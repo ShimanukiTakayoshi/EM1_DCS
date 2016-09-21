@@ -822,12 +822,6 @@ Public Class frmMain
                     'Average
                     Dim ave As Single = CSng(a5 / a1)
                     AverageL = ColumnSetDecimal(CSng(ave), 2)
-                    'If i <> 6 Then
-                    '    dgvData.Item(4, i * 2).Value = ColumnSetDecimal(CSng(ave), 2)
-                    'Else
-                    '    dgvData.Item(4, 11).Value = ColumnSetDecimal(CSng(ave), 2)
-                    'End If
-                    'Sigma
                     Dim Ssum As Double = 0
                     Scnt = 0
                     If i <> 6 Then
@@ -870,9 +864,9 @@ Public Class frmMain
                     Dim ave As Single = 0
                     If TotalMeasCount(i * 6 + 4) > 0 Then
                         ave = CSng(SumValue(i * 6 + 4) / TotalMeasCount(i * 6 + 4))
-                        dgvData.Item(4, i * 2).Value = ColumnSetDecimal(CSng(ave), 2)
+                        AverageL = ColumnSetDecimal(CSng(ave), 2)
                     Else
-                        dgvData.Item(4, i * 2).Value = "---"
+                        AverageL = "---"
                     End If
                     'Sigma
                     Dim Ssum As Double = 0
@@ -950,16 +944,16 @@ Public Class frmMain
                     End If
                 End If
             End If
-            'Select Case i
-            '    Case 6
-            '        dgvData.Item(3, 11).Value = YieldL
-            '        dgvData.Item(4, 11).Value = AverageL
-            '        dgvData.Item(5, 11).Value = SigmaL
-            '    Case Else
-            '        dgvData.Item(3, i * 2).Value = YieldL
-            '        'dgvData.Item(4, i * 2).Value = AverageL
-            '        dgvData.Item(5, i * 2).Value = SigmaL
-            'End Select
+            Select Case i
+                Case 6
+                    dgvData.Item(3, 11).Value = YieldL
+                    dgvData.Item(4, 11).Value = AverageL
+                    dgvData.Item(5, 11).Value = SigmaL
+                Case Else
+                    dgvData.Item(3, i * 2).Value = YieldL
+                    dgvData.Item(4, i * 2).Value = AverageL
+                    dgvData.Item(5, i * 2).Value = SigmaL
+            End Select
         Next
         '推移グラフ用平均データ取得
         For i As Integer = 6 To 37
@@ -1388,10 +1382,6 @@ Public Class frmMain
         Second = CInt(Rnd(1) * 60)
         DummyData(2) = ZeroPat(Str$(Hour), 2) + ":" + ZeroPat(Str$(Minute), 2) + ":" + ZeroPat(Str$(Second), 2)
         Dim i As Integer
-        'No.3～5：[判定ch1～3]生成
-        'For i = 3 To 5
-        '    DummyData(i) = DummyDataJudge()
-        'Next
         'No.6～9:[PV ch2～3L/R(OK/NG)]生成
         For i = 6 To 9
             DummyData(i) = DummyDataOkNg()
@@ -1451,10 +1441,10 @@ Public Class frmMain
         If DummyData(71) = "NG" Then DummyData(3) = "Fail"
         If DummyData(72) = "NG" Then DummyData(4) = "Fail"
         If DummyData(73) = "NG" Then DummyData(5) = "Fail"
+        '生成ダミーデータ転送
         For i = 0 To 73
             GetData(i) = DummyData(i)
         Next
-        i = i
     End Sub
 
     Public Function GetDummyData2() As String
