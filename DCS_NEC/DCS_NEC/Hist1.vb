@@ -33,7 +33,6 @@
         End If
     End Sub
 
-
     Public Sub HistMain1()
         Dim ch As Integer = cbxCh1.SelectedIndex                    'Ch取得
         Dim Item As Integer = cbxItem1.SelectedIndex                '項目取得
@@ -48,26 +47,9 @@
         Dim DataR(300) As Single    '有効データR
         Dim ValidL As Integer = 0   '有効データ数L
         Dim ValidR As Integer = 0   '有効データ数R
-        'For i As Integer = 0 To 300
-        '    DataL(i) = 0 : DataR(i) = 0
-        'Next
-        'picHist1.Image = New Bitmap(picHist1.Width, picHist1.Height)
-        'Dim gx As Graphics = Graphics.FromImage(picHist1.Image)
-        'gx.DrawLine(Pens.Pink, 1, 1, 100, 50)
         Dim backimage As New Bitmap(picHist1.Width, picHist1.Height)
         Dim gx As Graphics = Graphics.FromImage(backimage)
-
-
         '分布元データ取得
-        Dim sx(500, 2) As String
-        Dim sy(500,2) As String
-        For i As Integer = 1 To frmMain.StackCounter
-            For j As Integer = 0 To 2
-                sx(i, j) = frmMain.StackData(i, Item * 6 + j * 2 + 40)
-                sy(i, j) = frmMain.StackData(i, Item * 6 + j * 2 + 41)
-
-            Next
-        Next
         For i As Integer = 1 To frmMain.StackCounter
             For j As Short = 0 To 2
                 Select Case Item
@@ -88,9 +70,12 @@
                                 ValidL += 1
                                 DataL(ValidL) = CSng(frmMain.StackData(i, Item * 6 + 6))
                             End If
-                            If frmMain.StackData(i, Item * 6 + 41) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + 7)) = True Then
-                                ValidR += 1
-                                DataR(ValidR) = CSng(frmMain.StackData(i, Item * 6 + 7))
+                        End If
+                    Case 6
+                        If ch = 0 Or (ch = j + 1) Then
+                            If frmMain.StackData(i, Item * 6 + j + 41) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + j + 1)) = True Then
+                                ValidL += 1
+                                DataL(ValidL) = CSng(frmMain.StackData(i, Item * 6 + j + 1))
                             End If
                         End If
                     Case Else
@@ -106,22 +91,6 @@
                         End If
                 End Select
             Next j
-            'For j As Integer = 0 To 2
-            '    If (((Item = 0 Or Item = 1 Or Item = 4) And j < 2) Or ((Item = 0 Or Item = 1 Or Item = 4) And ch < 3 And ch > 0)) Or _
-            '            ((Item > 1 And Item < 4) And ch = 1 And j <> 0) Or _
-            '            ((Item > 1 And Item < 4) And ch = 2 And j <> 1) Or _
-            '            ((Item > 1 And Item < 4) And ch = 3 And j <> 2) Then
-            '    Else
-            '        If frmMain.StackData(i, Item * 6 + j * 2 + 40) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + j * 2 + 6)) = True Then
-            '            ValidL += 1
-            '            DataL(ValidL) = CSng(frmMain.StackData(i, Item * 6 + j * 2 + 6))
-            '        End If
-            '        If frmMain.StackData(i, Item * 6 + j * 2 + 41) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + j * 2 + 7)) = True Then
-            '            ValidR += 1
-            '            DataR(ValidR) = CSng(frmMain.StackData(i, Item * 6 + j * 2 + 7))
-            '        End If
-            '    End If
-            'Next j
         Next i
         '表示用分布データ作成
         For i As Integer = 1 To ValidL
@@ -165,12 +134,14 @@
         g.DrawString(frmMain.ColumnSetDecimal(gl, 1), df, db, Rx * 80, Ry * 910)
         g.DrawString(frmMain.ColumnSetDecimal(gh, 1), df, db, Rx * 880, Ry * 910)
         Select Case Item
-            Case 0 To 1
+            Case 0, 1, 5
                 g.DrawString("[V]", df, db, Rx * 870, Ry * 950)
-            Case 2 To 3
+            Case 2, 3
                 g.DrawString("[x9.8mN]", df, db, Rx * 870, Ry * 950)
-            Case Else
+            Case 4
                 g.DrawString("[mm]", df, db, Rx * 870, Ry * 950)
+            Case Else
+                g.DrawString("[mΩ]", df, db, Rx * 870, Ry * 950)
         End Select
         For i As Integer = 2 To 19 Step 2
             Dim x1 As Single = Rx * 80 + (Rx * 800 / 20) * i
@@ -235,7 +206,7 @@
                 Dim x1 As Single = CSng(100 + (800 / 20) * (i - 1) + 10)
                 g.DrawLine(PenL, Rx * x1, Ry * 899, Rx * x1, Ry * (800 - (HistL(i) / Digit) * 800 + 99))
             End If
-            If Item <> 5 Then
+            If Item <> 5 Or Item <> 6 Then
                 If HistR(i) > 0 Then
                     Dim x1 As Single = CSng(100 + (800 / 20) * (i - 1) + 30)
                     g.DrawLine(PenR, Rx * x1, Ry * 899, Rx * x1, Ry * (800 - (HistR(i) / Digit) * 800 + 99))
@@ -252,7 +223,6 @@
         g.DrawLine(Pen1, Rx * (x2 - 50), Ry * 200, Rx * x2, Ry * 200)
         g.DrawString(frmMain.ColumnSetDecimal(hl, 2), df, db, Rx * (x2 - 20), Ry * 135)
     End Sub
-
 
     Private Sub cbxCh1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxCh1.SelectedIndexChanged
         If frmMain.StackCounter > 0 Then

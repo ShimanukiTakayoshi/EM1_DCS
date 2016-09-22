@@ -33,7 +33,6 @@
         End If
     End Sub
 
-
     Public Sub HistMain2()
         Dim ch As Integer = cbxCh2.SelectedIndex                    'Ch取得
         Dim Item As Integer = cbxItem2.SelectedIndex                '項目取得
@@ -48,10 +47,8 @@
         Dim DataR(300) As Single    '有効データR
         Dim ValidL As Integer = 0   '有効データ数L
         Dim ValidR As Integer = 0   '有効データ数R
-
         Dim backimage As New Bitmap(picHist2.Width, picHist2.Height)
         Dim gx As Graphics = Graphics.FromImage(backimage)
-
         '分布元データ取得
         For i As Integer = 1 To frmMain.StackCounter                            'stackCounter
             For j As Short = 0 To 2
@@ -73,9 +70,12 @@
                                 ValidL += 1
                                 DataL(ValidL) = CSng(frmMain.StackData(i, Item * 6 + 6))
                             End If
-                            If frmMain.StackData(i, Item * 6 + 41) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + 7)) = True Then
-                                ValidR += 1
-                                DataR(ValidR) = CSng(frmMain.StackData(i, Item * 6 + 7))
+                        End If
+                    Case 6
+                        If ch = 0 Or (ch = j + 1) Then
+                            If frmMain.StackData(i, Item * 6 + j + 41) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + j + 1)) = True Then
+                                ValidL += 1
+                                DataL(ValidL) = CSng(frmMain.StackData(i, Item * 6 + j + 1))
                             End If
                         End If
                     Case Else
@@ -90,24 +90,7 @@
                             End If
                         End If
                 End Select
-            Next j            'For j As Integer = 0 To 2
-            '    If (((Item = 0 Or Item = 1) And j < 2) Or ((Item = 0 Or Item = 1) And ch < 3 And ch > 0)) Or _
-            '            (Item > 1 And ch = 1 And j <> 0) Or _
-            '            (Item > 1 And ch = 2 And j <> 1) Or _
-            '            (Item > 1 And ch = 3 And j <> 2) Then
-            '    Else
-            '        If frmMain.StackData(i, Item * 6 + j * 2 + 40) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + j * 2 + 6)) = True Then
-            '            ValidL += 1
-            '            Dim xy As String = frmMain.StackData(i, Item * 6 + j * 2 + 40)
-            '            Dim xx As String = frmMain.StackData(i, Item * 6 + j * 2 + 6)
-            '            DataL(ValidL) = CSng(frmMain.StackData(i, Item * 6 + j * 2 + 6))
-            '        End If
-            '        If frmMain.StackData(i, Item * 6 + j * 2 + 41) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + j * 2 + 7)) = True Then
-            '            ValidR += 1
-            '            DataR(ValidR) = CSng(frmMain.StackData(i, Item * 6 + j * 2 + 7))
-            '        End If
-            '    End If
-            'Next j
+            Next j
         Next i
         '表示用分布データ作成
         For i As Integer = 1 To ValidL
