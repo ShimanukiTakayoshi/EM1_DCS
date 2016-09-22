@@ -746,33 +746,12 @@ Public Class frmMain
         Dim AverageR As String = ""
         Dim SigmaL As String = ""
         Dim SigmaR As String = ""
+        Dim CpkL As String = ""
+        Dim CpkR As String = ""
 
         For i As Integer = 0 To 6
             Dim ll As Single = CSng(TypeData(TypeCode, i * 4 + 2))
             Dim hl As Single = CSng(TypeData(TypeCode, i * 4 + 3))
-            'If i <> 5 Then
-            '    a1 = TotalMeasCount(i * 6) + TotalMeasCount(i * 6 + 2) + TotalMeasCount(i * 6 + 4)
-            '    a2 = TotalMeasCount(i * 6 + 1) + TotalMeasCount(i * 6 + 3) + TotalMeasCount(i * 6 + 5)
-            '    a3 = PassMeasCount(i * 6) + PassMeasCount(i * 6 + 2) + PassMeasCount(i * 6 + 4)
-            '    a4 = PassMeasCount(i * 6 + 1) + PassMeasCount(i * 6 + 3) + PassMeasCount(i * 6 + 5)
-            '    a5 = SumValue(i * 6) + SumValue(i * 6 + 2) + SumValue(i * 6 + 4)      'SumL
-            '    a6 = SumValue(i * 6 + 1) + SumValue(i * 6 + 3) + SumValue(i * 6 + 5)  'SumR
-            '    a7 = FullTotalMeasCount(i * 6) + FullTotalMeasCount(i * 6 + 2) + FullTotalMeasCount(i * 6 + 4)
-            '    a8 = FullTotalMeasCount(i * 6 + 1) + FullTotalMeasCount(i * 6 + 3) + FullTotalMeasCount(i * 6 + 5)
-            '    a9 = FullPassMeasCount(i * 6) + FullPassMeasCount(i * 6 + 2) + FullPassMeasCount(i * 6 + 4)
-            '    a10 = FullPassMeasCount(i * 6 + 1) + FullPassMeasCount(i * 6 + 3) + FullPassMeasCount(i * 6 + 5)
-            'Else
-            '    a1 = TotalMeasCount(i * 6)
-            '    a2 = TotalMeasCount(i * 6 + 1)
-            '    a3 = PassMeasCount(i * 6)
-            '    a4 = PassMeasCount(i * 6 + 1)
-            '    a5 = SumValue(i * 6)
-            '    a6 = SumValue(i * 6 + 1)
-            '    a7 = FullTotalMeasCount(i * 6)
-            '    a8 = FullTotalMeasCount(i * 6 + 1)
-            '    a9 = FullPassMeasCount(i * 6)
-            '    a10 = FullPassMeasCount(i * 6 + 1)
-            'End If
             i = i
             Select Case i
                 Case 5
@@ -813,7 +792,6 @@ Public Class frmMain
                     dgvData.Item(2, i * 2 + 1).Value = a10   'PassCountR
             End Select
             If a1 > 0 Then
-                'dgvData.Item(3, i * 2).Value = ColumnSetDecimal(CSng(a3 / a1 * 100), 2)
                 YieldL = ColumnSetDecimal(CSng(a3 / a1 * 100), 2)
                 If i <> 0 And i <> 1 Then
                     If i = 4 Then
@@ -824,41 +802,49 @@ Public Class frmMain
                     AverageL = ColumnSetDecimal(CSng(ave), 2)
                     Dim Ssum As Double = 0
                     Scnt = 0
-                    If i <> 6 Then
-                        For j As Integer = 1 To StackCounter
-                            If StackData(j, i * 6 + 0 + 40) = "OK" Or StackData(j, i * 6 + 0 + 40) = "NG" Then
-                                Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 0)) - ave) ^ 2
-                                Scnt += 1
-                            End If
-                            If StackData(j, i * 6 + 2 + 40) = "OK" Or StackData(j, i * 6 + 2 + 40) = "NG" Then
-                                Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 2)) - ave) ^ 2
-                                Scnt += 1
-                            End If
-                            If StackData(j, i * 6 + 4 + 40) = "OK" Or StackData(j, i * 6 + 4 + 40) = "NG" Then
-                                Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 4)) - ave) ^ 2
-                                Scnt += 1
-                            End If
-                        Next j
-                    Else
-                        For j As Integer = 1 To StackCounter
-                            If StackData(j, 31 + 40) = "OK" Or StackData(j, 31 + 40) = "NG" Then
-                                Ssum = Ssum + (Val(StackData(j, 37)) - ave) ^ 2
-                                Scnt += 1
-                            End If
-                            If StackData(j, 32 + 40) = "OK" Or StackData(j, 32 + 40) = "NG" Then
-                                Ssum = Ssum + (Val(StackData(j, 38)) - ave) ^ 2
-                                Scnt += 1
-                            End If
-                            If StackData(j, 33 + 40) = "OK" Or StackData(j, 33 + 40) = "NG" Then
-                                Ssum = Ssum + (Val(StackData(j, 39)) - ave) ^ 2
-                                Scnt += 1
-                            End If
-                        Next j
-                    End If
+                    Select Case i
+                        Case 5
+                            For j As Integer = 1 To StackCounter
+                                If StackData(j, 30 + 40) = "OK" Or StackData(j, 30 + 40) = "NG" Then
+                                    Ssum = Ssum + (Val(StackData(j, 36)) - ave) ^ 2
+                                    Scnt += 1
+                                End If
+                            Next j
+                        Case 6
+                            For j As Integer = 1 To StackCounter
+                                If StackData(j, 31 + 40) = "OK" Or StackData(j, 31 + 40) = "NG" Then
+                                    Ssum = Ssum + (Val(StackData(j, 37)) - ave) ^ 2
+                                    Scnt += 1
+                                End If
+                                If StackData(j, 32 + 40) = "OK" Or StackData(j, 32 + 40) = "NG" Then
+                                    Ssum = Ssum + (Val(StackData(j, 38)) - ave) ^ 2
+                                    Scnt += 1
+                                End If
+                                If StackData(j, 33 + 40) = "OK" Or StackData(j, 33 + 40) = "NG" Then
+                                    Ssum = Ssum + (Val(StackData(j, 39)) - ave) ^ 2
+                                    Scnt += 1
+                                End If
+                            Next j
+                        Case Else
+                            For j As Integer = 1 To StackCounter
+                                If StackData(j, i * 6 + 0 + 40) = "OK" Or StackData(j, i * 6 + 0 + 40) = "NG" Then
+                                    Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 0)) - ave) ^ 2
+                                    Scnt += 1
+                                End If
+                                If StackData(j, i * 6 + 2 + 40) = "OK" Or StackData(j, i * 6 + 2 + 40) = "NG" Then
+                                    Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 2)) - ave) ^ 2
+                                    Scnt += 1
+                                End If
+                                If StackData(j, i * 6 + 4 + 40) = "OK" Or StackData(j, i * 6 + 4 + 40) = "NG" Then
+                                    Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 4)) - ave) ^ 2
+                                    Scnt += 1
+                                End If
+                            Next j
+                    End Select
                     Dim sigma As Single = CSng(Math.Sqrt(Ssum / Scnt))
                     SigmaL = ColumnSetDecimal(CSng(sigma), 2)
                     'Cpk
-                    dgvData.Item(6, i * 2).Value = ColumnSetDecimal(Cpk(ll, hl, ave, sigma), 2)
+                    CpkL = ColumnSetDecimal(Cpk(ll, hl, ave, sigma), 2)
                 Else
                     'Average
                     Dim ave As Single = 0
@@ -879,80 +865,93 @@ Public Class frmMain
                     Next j
                     Dim sigma As Single = CSng(Math.Sqrt(Ssum / Scnt))
                     If sigma > 0 Then
-                        dgvData.Item(5, i * 2).Value = ColumnSetDecimal(CSng(sigma), 2)
+                        SigmaL = ColumnSetDecimal(CSng(sigma), 2)
                         'Cpk
-                        dgvData.Item(6, i * 2).Value = ColumnSetDecimal(Cpk(ll, hl, ave, sigma), 2)
+                        CpkL = ColumnSetDecimal(Cpk(ll, hl, ave, sigma), 2)
                     Else
-                        dgvData.Item(5, i * 2).Value = "---"
-                        dgvData.Item(6, i * 2).Value = "---"
+                        SigmaL = "---"
+                        CpkL = "---"
                     End If
                 End If
             End If
-            If a2 > 0 And i <> 5 And i <> 6 Then
-                dgvData.Item(3, i * 2 + 1).Value = ColumnSetDecimal(CSng(a4 / a2 * 100), 2)
-                If i <> 0 And i <> 1 Then
-                    'Average
-                    Dim ave As Single = CSng(a6 / a2)
-                    dgvData.Item(4, i * 2 + 1).Value = ColumnSetDecimal(CSng(ave), 2)
-                    'Sigma
-                    Dim Ssum As Double = 0
-                    Scnt = 0
-                    For j As Integer = 1 To StackCounter
-                        If StackData(j, i * 6 + 1 + 40) = "OK" Or StackData(j, i * 6 + 1 + 40) = "NG" Then
-                            Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 1)) - ave) ^ 2
-                            Scnt += 1
-                        End If
-                        If StackData(j, i * 6 + 3 + 40) = "OK" Or StackData(j, i * 6 + 3 + 40) = "NG" Then
-                            Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 3)) - ave) ^ 2
-                            Scnt += 1
-                        End If
-                        If StackData(j, i * 6 + 5 + 40) = "OK" Or StackData(j, i * 6 + 5 + 40) = "NG" Then
-                            Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 5)) - ave) ^ 2
-                            Scnt += 1
-                        End If
-                    Next j
-                    Dim sigma As Single = CSng(Math.Sqrt(Ssum / Scnt))
-                    dgvData.Item(5, i * 2 + 1).Value = ColumnSetDecimal(CSng(sigma), 2)
-                    'Cpk
-                    dgvData.Item(6, i * 2 + 1).Value = ColumnSetDecimal(Cpk(ll, hl, ave, sigma), 2)
-                Else
-                    'Average
-                    Dim ave As Single = 0
-                    If TotalMeasCount(i * 6 + 5) > 0 Then
-                        ave = CSng(SumValue(i * 6 + 5) / TotalMeasCount(i * 6 + 5))
-                        dgvData.Item(4, i * 2 + 1).Value = ColumnSetDecimal(CSng(ave), 2)
-                    Else
-                        dgvData.Item(4, i * 2 + 1).Value = "---"
-                    End If
-                    'Sigma
-                    Dim Ssum As Double = 0
-                    Scnt = 0
-                    For j As Integer = 1 To StackCounter
-                        If StackData(j, i * 6 + 1 + 40) = "OK" Or StackData(j, i * 6 + 1 + 40) = "NG" Then
-                            Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 5)) - ave) ^ 2
-                            Scnt += 1
-                        End If
-                    Next j
-                    Dim sigma As Single = CSng(Math.Sqrt(Ssum / Scnt))
-                    If sigma > 0 Then
-                        dgvData.Item(5, i * 2 + 1).Value = ColumnSetDecimal(CSng(sigma), 2)
+            If i <> 5 And i <> 6 Then
+                If a2 > 0 Then
+                    YieldR = ColumnSetDecimal(CSng(a4 / a2 * 100), 2)
+                    If i <> 0 And i <> 1 Then
+                        'Average
+                        Dim ave As Single = CSng(a6 / a2)
+                        AverageR = ColumnSetDecimal(CSng(ave), 2)
+                        'Sigma
+                        Dim Ssum As Double = 0
+                        Scnt = 0
+                        For j As Integer = 1 To StackCounter
+                            If StackData(j, i * 6 + 1 + 40) = "OK" Or StackData(j, i * 6 + 1 + 40) = "NG" Then
+                                Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 1)) - ave) ^ 2
+                                Scnt += 1
+                            End If
+                            If StackData(j, i * 6 + 3 + 40) = "OK" Or StackData(j, i * 6 + 3 + 40) = "NG" Then
+                                Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 3)) - ave) ^ 2
+                                Scnt += 1
+                            End If
+                            If StackData(j, i * 6 + 5 + 40) = "OK" Or StackData(j, i * 6 + 5 + 40) = "NG" Then
+                                Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 5)) - ave) ^ 2
+                                Scnt += 1
+                            End If
+                        Next j
+                        Dim sigma As Single = CSng(Math.Sqrt(Ssum / Scnt))
+                        SigmaR = ColumnSetDecimal(CSng(sigma), 2)
                         'Cpk
-                        dgvData.Item(6, i * 2 + 1).Value = ColumnSetDecimal(Cpk(ll, hl, ave, sigma), 2)
+                        CpkR = ColumnSetDecimal(Cpk(ll, hl, ave, sigma), 2)
                     Else
-                        dgvData.Item(5, i * 2 + 1).Value = "---"
-                        dgvData.Item(6, i * 2 + 1).Value = "---"
+                        'Average
+                        Dim ave As Single = 0
+                        If TotalMeasCount(i * 6 + 5) > 0 Then
+                            ave = CSng(SumValue(i * 6 + 5) / TotalMeasCount(i * 6 + 5))
+                            AverageR = ColumnSetDecimal(CSng(ave), 2)
+                        Else
+                            AverageR = "---"
+                        End If
+                        'Sigma
+                        Dim Ssum As Double = 0
+                        Scnt = 0
+                        For j As Integer = 1 To StackCounter
+                            If StackData(j, i * 6 + 1 + 40) = "OK" Or StackData(j, i * 6 + 1 + 40) = "NG" Then
+                                Ssum = Ssum + (Val(StackData(j, (i + 1) * 6 + 5)) - ave) ^ 2
+                                Scnt += 1
+                            End If
+                        Next j
+                        Dim sigma As Single = CSng(Math.Sqrt(Ssum / Scnt))
+                        If sigma > 0 Then
+                            SigmaR = ColumnSetDecimal(CSng(sigma), 2)
+                            'Cpk
+                            CpkR = ColumnSetDecimal(Cpk(ll, hl, ave, sigma), 2)
+                        Else
+                            SigmaR = "---"
+                            CpkR = "---"
+                        End If
                     End If
                 End If
             End If
             Select Case i
+                Case 5
+                    dgvData.Item(3, 10).Value = YieldL
+                    dgvData.Item(4, 10).Value = AverageL
+                    dgvData.Item(5, 10).Value = SigmaL
+                    dgvData.Item(6, 10).Value = CpkL
                 Case 6
                     dgvData.Item(3, 11).Value = YieldL
                     dgvData.Item(4, 11).Value = AverageL
                     dgvData.Item(5, 11).Value = SigmaL
+                    dgvData.Item(6, 11).Value = CpkL
                 Case Else
                     dgvData.Item(3, i * 2).Value = YieldL
                     dgvData.Item(4, i * 2).Value = AverageL
                     dgvData.Item(5, i * 2).Value = SigmaL
+                    dgvData.Item(6, i * 2).Value = CpkL
+                    dgvData.Item(3, i * 2 + 1).Value = YieldR
+                    dgvData.Item(4, i * 2 + 1).Value = AverageR
+                    dgvData.Item(5, i * 2 + 1).Value = SigmaR
+                    dgvData.Item(6, i * 2 + 1).Value = CpkR
             End Select
         Next
         '推移グラフ用平均データ取得
@@ -1754,7 +1753,7 @@ Public Class frmMain
         dgvData.Height = 181 + 16 + 16
         'Sheet 設定
         Sheet.Width = 813 + 180 + 660
-        Sheet.Height = 295 + 64 - 32
+        Sheet.Height = 295 + 64 - 32 + 200
         'picHist0 設定
         picHist0.Width = 411 + 192
         picHist0.Height = 282 + 13 + 16
@@ -2164,7 +2163,7 @@ Public Class frmMain
 
     Private Sub mnuTotalDataSheetOpen_Click(sender As Object, e As EventArgs) Handles mnuTotalDataSheetOpen.Click
         Me.Width = 1800 '1024
-        Me.Height = 730 '768
+        Me.Height = 730 + 200 '768
     End Sub
 
     Private Sub mnuTotalDataSheetClose_Click(sender As Object, e As EventArgs) Handles mnuTotalDataSheetClose.Click
