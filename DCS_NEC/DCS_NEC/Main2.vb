@@ -250,7 +250,6 @@ Public Class frmMain
             StackDataShift()
             StackCounter = 100
         End If
-
         YieldCalc()    '歩留集計-
         DataCalc2()    '測定値集計
         'データシート表示
@@ -365,9 +364,12 @@ Public Class frmMain
                                 ValidL += 1
                                 DataL(ValidL) = CSng(StackData(i, Item * 6 + 6))
                             End If
-                            If StackData(i, Item * 6 + 41) <> "--" And MathCheck(StackData(i, Item * 6 + 7)) = True Then
-                                ValidR += 1
-                                DataR(ValidR) = CSng(StackData(i, Item * 6 + 7))
+                        End If
+                    Case 6
+                        If ch = 0 Or (ch = j + 1) Then
+                            If StackData(i, Item * 6 + j + 41) <> "--" And MathCheck(StackData(i, Item * 6 + j + 1)) = True Then
+                                ValidL += 1
+                                DataL(ValidL) = CSng(StackData(i, Item * 6 + j + 1))
                             End If
                         End If
                     Case Else
@@ -383,24 +385,6 @@ Public Class frmMain
                         End If
                 End Select
             Next j
-            'For j As Integer = 0 To 2
-            '    If (((Item = 0 Or Item = 1) And j < 2) Or ((Item = 0 Or Item = 1) And ch < 3 And ch > 0)) Or _
-            '            (Item > 1 And ch = 1 And j <> 0) Or _
-            '            (Item > 1 And ch = 2 And j <> 1) Or _
-            '            (Item > 1 And ch = 3 And j <> 2) Then
-            '    Else
-            '        If StackData(i, Item * 6 + j * 2 + 40) <> "--" And MathCheck(StackData(i, Item * 6 + j * 2 + 6)) = True Then
-            '            ValidL += 1
-            '            Dim xy As String = StackData(i, Item * 6 + j * 2 + 40)
-            '            Dim xx As String = StackData(i, Item * 6 + j * 2 + 6)
-            '            DataL(ValidL) = CSng(StackData(i, Item * 6 + j * 2 + 6))
-            '        End If
-            '        If StackData(i, Item * 6 + j * 2 + 41) <> "--" And MathCheck(StackData(i, Item * 6 + j * 2 + 7)) = True Then
-            '            ValidR += 1
-            '            DataR(ValidR) = CSng(StackData(i, Item * 6 + j * 2 + 7))
-            '        End If
-            '    End If
-            'Next j
         Next i
         '表示用分布データ作成
         For i As Integer = 1 To ValidL
@@ -444,12 +428,14 @@ Public Class frmMain
         g.DrawString(ColumnSetDecimal(gl, 1), df, db, Rx * 80, Ry * 910)
         g.DrawString(ColumnSetDecimal(gh, 1), df, db, Rx * 880, Ry * 910)
         Select Case Item
-            Case 0 To 1
+            Case 0, 1, 5
                 g.DrawString("[V]", df, db, Rx * 870, Ry * 950)
-            Case 2 To 3
+            Case 2, 3
                 g.DrawString("[x9.8mN]", df, db, Rx * 870, Ry * 950)
-            Case Else
+            Case 4
                 g.DrawString("[mm]", df, db, Rx * 870, Ry * 950)
+            Case Else
+                g.DrawString("[mΩ]", df, db, Rx * 870, Ry * 950)
         End Select
         For i As Integer = 2 To 19 Step 2
             Dim x1 As Single = Rx * 80 + (Rx * 800 / 20) * i
@@ -472,8 +458,6 @@ Public Class frmMain
         Dim tmp2 As Single = 0
         If ValidL = 0 Then Tmp1 = 0 Else Tmp1 = CSng(HistLMax / ValidL)
         If ValidR = 0 Then tmp2 = 0 Else tmp2 = CSng(HistRMax / ValidR)
-        'Dim Tmp1 As Single = CSng(HistLMax / ValidL)
-        'Dim tmp2 As Single = CSng(HistRMax / ValidR)
         '
         Dim ValidMax As Integer = 0
         If Tmp1 > tmp2 Then
@@ -523,7 +507,7 @@ Public Class frmMain
                 Dim x1 As Single = CSng(100 + (800 / 20) * (i - 1) + 10)
                 g.DrawLine(PenL, Rx * x1, Ry * 899, Rx * x1, Ry * (800 - (HistL(i) / Digit) * 800 + 99))
             End If
-            If Item <> 5 Then
+            If Item <> 5 Or Item <> 6 Then
                 If HistR(i) > 0 Then
                     Dim x1 As Single = CSng(100 + (800 / 20) * (i - 1) + 30)
                     g.DrawLine(PenR, Rx * x1, Ry * 899, Rx * x1, Ry * (800 - (HistR(i) / Digit) * 800 + 99))

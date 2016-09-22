@@ -348,7 +348,6 @@ Partial Class frmMain
         'timMain
         '
         Me.timMain.Enabled = True
-        Me.timMain.Interval = 1000
         '
         'SysmacCJ1
         '
