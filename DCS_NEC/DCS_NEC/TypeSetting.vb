@@ -31,8 +31,12 @@
         dgvType.Columns.Add("23", "TSH")
         dgvType.Columns.Add("24", "TSLG")
         dgvType.Columns.Add("25", "TSHG")
+        dgvType.Columns.Add("26", "CRL")
+        dgvType.Columns.Add("27", "CRH")
+        dgvType.Columns.Add("28", "CRLG")
+        dgvType.Columns.Add("29", "CRHG")
         dgvType.Columns(0).DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
-        For i As Integer = 0 To 25
+        For i As Integer = 0 To 29
             dgvType.Columns(i).Width = 40
         Next
         dgvType.Columns(1).Width = 125
@@ -43,7 +47,7 @@
         Next i
         dgvType.RowHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
         For i As Integer = 0 To 9
-            For j As Integer = 0 To 25
+            For j As Integer = 0 To 29
                 Dim b As String
                 b = frmMain.TypeData(i, j)
                 dgvType.Item(j, i).Value = frmMain.TypeData(i, j)

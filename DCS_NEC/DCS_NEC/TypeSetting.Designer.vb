@@ -36,7 +36,7 @@ Partial Class frmTypeSetting
         Me.dgvType.Name = "dgvType"
         Me.dgvType.RowTemplate.Height = 21
         Me.dgvType.ScrollBars = System.Windows.Forms.ScrollBars.None
-        Me.dgvType.Size = New System.Drawing.Size(1131, 231)
+        Me.dgvType.Size = New System.Drawing.Size(1288, 231)
         Me.dgvType.TabIndex = 0
         '
         'btnTypeWrite
@@ -74,7 +74,7 @@ Partial Class frmTypeSetting
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
-        Me.ClientSize = New System.Drawing.Size(1155, 287)
+        Me.ClientSize = New System.Drawing.Size(1307, 287)
         Me.ControlBox = False
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.btnTypeDataClose)
