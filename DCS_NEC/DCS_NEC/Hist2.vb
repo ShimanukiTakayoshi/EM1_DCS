@@ -131,21 +131,34 @@
         Dim ds As String = frmMain.ColumnSetDecimal(gl, 1)
         Dim df As New Font("ＭＳゴシック", 8)
         Dim db As New SolidBrush(Color.Black)
-        g.DrawString(frmMain.ColumnSetDecimal(gl, 1), df, db, Rx * 80, Ry * 910)
-        g.DrawString(frmMain.ColumnSetDecimal(gh, 1), df, db, Rx * 880, Ry * 910)
         Select Case Item
             Case 0, 1, 5
                 g.DrawString("[V]", df, db, Rx * 870, Ry * 950)
+                g.DrawString(frmMain.ColumnSetDecimal(gl, 1), df, db, Rx * 80, Ry * 910)
+                g.DrawString(frmMain.ColumnSetDecimal(gh, 1), df, db, Rx * 880, Ry * 910)
             Case 2, 3
                 g.DrawString("[x9.8mN]", df, db, Rx * 870, Ry * 950)
+                g.DrawString(frmMain.ColumnSetDecimal(gl, 1), df, db, Rx * 80, Ry * 910)
+                g.DrawString(frmMain.ColumnSetDecimal(gh, 1), df, db, Rx * 880, Ry * 910)
             Case 4
                 g.DrawString("[mm]", df, db, Rx * 870, Ry * 950)
+                g.DrawString(frmMain.ColumnSetDecimal(gl, 2), df, db, Rx * 80, Ry * 910)
+                g.DrawString(frmMain.ColumnSetDecimal(gh, 2), df, db, Rx * 880, Ry * 910)
             Case Else
                 g.DrawString("[mΩ]", df, db, Rx * 870, Ry * 950)
+                g.DrawString(frmMain.ColumnSetDecimal(gl, 0), df, db, Rx * 80, Ry * 910)
+                g.DrawString(frmMain.ColumnSetDecimal(gh, 0), df, db, Rx * 880, Ry * 910)
         End Select
         For i As Integer = 2 To 19 Step 2
             Dim x1 As Single = Rx * 80 + (Rx * 800 / 20) * i
-            g.DrawString(frmMain.ColumnSetDecimal(gl + Div * i, 1), df, db, x1, Ry * 910)
+            Select Case Item
+                Case 4
+                    g.DrawString(frmMain.ColumnSetDecimal(gl + Div * i, 2), df, db, x1 - 10, Ry * 910)
+                Case 6
+                    g.DrawString(frmMain.ColumnSetDecimal(gl + Div * i, 0), df, db, x1 - 10, Ry * 910)
+                Case Else
+                    g.DrawString(frmMain.ColumnSetDecimal(gl + Div * i, 1), df, db, x1, Ry * 910)
+            End Select
         Next i
         '一番大きいセグメントを調べる
         Dim HistLMax As Integer = HistL(0)
