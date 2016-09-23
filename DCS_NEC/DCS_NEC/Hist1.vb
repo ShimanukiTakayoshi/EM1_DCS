@@ -158,8 +158,10 @@
         Dim tmp0 As Single = 0
         Dim Tmp1 As Single = CSng(HistLMax / ValidL)
         Dim tmp2 As Single = CSng(HistRMax / ValidR)
+        If ValidL = 0 Then Tmp1 = 0 Else Tmp1 = CSng(HistLMax / ValidL)
+        If ValidR = 0 Then tmp2 = 0 Else tmp2 = CSng(HistRMax / ValidR)
         Dim ValidMax As Integer = 0
-        If (Tmp1 > tmp2) Or ValidR <= 0 Then
+        If Tmp1 > tmp2 Then
             tmp0 = Tmp1
             ValidMax = ValidL
         Else

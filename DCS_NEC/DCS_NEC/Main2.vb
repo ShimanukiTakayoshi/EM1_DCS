@@ -458,7 +458,6 @@ Public Class frmMain
         Dim tmp2 As Single = 0
         If ValidL = 0 Then Tmp1 = 0 Else Tmp1 = CSng(HistLMax / ValidL)
         If ValidR = 0 Then tmp2 = 0 Else tmp2 = CSng(HistRMax / ValidR)
-        '
         Dim ValidMax As Integer = 0
         If Tmp1 > tmp2 Then
             tmp0 = Tmp1

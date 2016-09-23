@@ -47,13 +47,8 @@
         Dim DataR(300) As Single    '有効データR
         Dim ValidL As Integer = 0   '有効データ数L
         Dim ValidR As Integer = 0   '有効データ数R
-        'For i As Integer = 0 To 300
-        '    DataL(i) = 0 : DataR(i) = 0
-        'Next
-
         Dim backimage As New Bitmap(picHist3.Width, picHist3.Height)
         Dim gx As Graphics = Graphics.FromImage(backimage)
-
         '分布元データ取得
         For i As Integer = 1 To frmMain.StackCounter                            'stackCounter
             For j As Short = 0 To 2
@@ -75,12 +70,15 @@
                                 ValidL += 1
                                 DataL(ValidL) = CSng(frmMain.StackData(i, Item * 6 + 6))
                             End If
-                            If frmMain.StackData(i, Item * 6 + 41) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + 7)) = True Then
-                                ValidR += 1
-                                DataR(ValidR) = CSng(frmMain.StackData(i, Item * 6 + 7))
+                        End If
+                    Case 6
+                        If ch = 0 Or (ch = j + 1) Then
+                            If frmMain.StackData(i, Item * 6 + j + 41) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + j + 1)) = True Then
+                                ValidL += 1
+                                DataL(ValidL) = CSng(frmMain.StackData(i, Item * 6 + j + 1))
                             End If
                         End If
-                    Case Else
+                   Case Else
                         If ch = 0 Or (ch = j + 1) Then
                             If frmMain.StackData(i, Item * 6 + j * 2 + 40) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + j * 2 + 6)) = True Then
                                 ValidL += 1
@@ -92,29 +90,7 @@
                             End If
                         End If
                 End Select
-            Next j            'For j As Integer = 0 To 2
-            '    If (((Item = 0 Or Item = 1) And j < 2) Or ((Item = 0 Or Item = 1) And ch < 3 And ch > 0)) Or _
-            '            (Item > 1 And ch = 1 And j <> 0) Or _
-            '            (Item > 1 And ch = 2 And j <> 1) Or _
-            '            (Item > 1 And ch = 3 And j <> 2) Then
-            '        '
-            '    Else
-            '        If frmMain.StackData(i, Item * 6 + j * 2 + 40) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + j * 2 + 6)) = True Then
-            '            ValidL += 1
-            '            Dim xy As String = frmMain.StackData(i, Item * 6 + j * 2 + 40)
-            '            Dim xx As String = frmMain.StackData(i, Item * 6 + j * 2 + 6)
-            '            DataL(ValidL) = CSng(frmMain.StackData(i, Item * 6 + j * 2 + 6))
-            '        End If
-            '        If frmMain.StackData(i, Item * 6 + j * 2 + 41) <> "--" And frmMain.MathCheck(frmMain.StackData(i, Item * 6 + j * 2 + 7)) = True Then
-            '            ValidR += 1
-            '            DataR(ValidR) = CSng(frmMain.StackData(i, Item * 6 + j * 2 + 7))
-            '        End If
-            '    End If
-            '    'PV/DVの時はch1のみ
-            '    'If Item > 1 And ch = 1 And j <> 0 Then Exit Do ' 
-            '    'If Item > 1 And ch = 2 And j <> 1 Then Exit Do '
-            '    'If Item > 1 And ch = 3 And j <> 2 Then Exit Do ' 
-            'Next j
+            Next j
         Next i
         '表示用分布データ作成
         For i As Integer = 1 To ValidL
@@ -143,8 +119,6 @@
         Dim Pen1 As Pen = New Pen(Color.Black, 1)
         Dim g As Graphics = picHist3.CreateGraphics
         g.Clear(Color.White)
-        'g.DrawRectangle(New Pen(Color.Black, 2), 0, 0, 100, 100)
-        'g.DrawRectangle(Pen1, 100, 100, Rx * 100, Ry * 100)
         ''外枠を描く
         g.DrawRectangle(Pen1, 0, 0, Rx * 1000 - 1, Ry * 1000 - 1)
         g.DrawRectangle(Pen1, Rx * 100, Ry * 100, Rx * 800, Ry * 800)
@@ -160,12 +134,14 @@
         g.DrawString(frmMain.ColumnSetDecimal(gl, 1), df, db, Rx * 80, Ry * 910)
         g.DrawString(frmMain.ColumnSetDecimal(gh, 1), df, db, Rx * 880, Ry * 910)
         Select Case Item
-            Case 0 To 1
+            Case 0, 1, 5
                 g.DrawString("[V]", df, db, Rx * 870, Ry * 950)
-            Case 2 To 3
+            Case 2, 3
                 g.DrawString("[x9.8mN]", df, db, Rx * 870, Ry * 950)
-            Case Else
+            Case 4
                 g.DrawString("[mm]", df, db, Rx * 870, Ry * 950)
+            Case Else
+                g.DrawString("[mΩ]", df, db, Rx * 870, Ry * 950)
         End Select
         For i As Integer = 2 To 19 Step 2
             Dim x1 As Single = Rx * 80 + (Rx * 800 / 20) * i
@@ -182,6 +158,8 @@
         Dim tmp0 As Single = 0
         Dim Tmp1 As Single = CSng(HistLMax / ValidL)
         Dim tmp2 As Single = CSng(HistRMax / ValidR)
+        If ValidL = 0 Then Tmp1 = 0 Else Tmp1 = CSng(HistLMax / ValidL)
+        If ValidR = 0 Then tmp2 = 0 Else tmp2 = CSng(HistRMax / ValidR)
         Dim ValidMax As Integer = 0
         If Tmp1 > tmp2 Then
             tmp0 = Tmp1
@@ -230,7 +208,7 @@
                 Dim x1 As Single = CSng(100 + (800 / 20) * (i - 1) + 10)
                 g.DrawLine(PenL, Rx * x1, Ry * 899, Rx * x1, Ry * (800 - (HistL(i) / Digit) * 800 + 99))
             End If
-            If Item <> 5 Then
+            If Item <> 5 Or Item <> 6 Then
                 If HistR(i) > 0 Then
                     Dim x1 As Single = CSng(100 + (800 / 20) * (i - 1) + 30)
                     g.DrawLine(PenR, Rx * x1, Ry * 899, Rx * x1, Ry * (800 - (HistR(i) / Digit) * 800 + 99))

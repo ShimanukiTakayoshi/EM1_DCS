@@ -134,12 +134,14 @@
         g.DrawString(frmMain.ColumnSetDecimal(gl, 1), df, db, Rx * 80, Ry * 910)
         g.DrawString(frmMain.ColumnSetDecimal(gh, 1), df, db, Rx * 880, Ry * 910)
         Select Case Item
-            Case 0 To 1
+            Case 0, 1, 5
                 g.DrawString("[V]", df, db, Rx * 870, Ry * 950)
-            Case 2 To 3
+            Case 2, 3
                 g.DrawString("[x9.8mN]", df, db, Rx * 870, Ry * 950)
-            Case Else
+            Case 4
                 g.DrawString("[mm]", df, db, Rx * 870, Ry * 950)
+            Case Else
+                g.DrawString("[mΩ]", df, db, Rx * 870, Ry * 950)
         End Select
         For i As Integer = 2 To 19 Step 2
             Dim x1 As Single = Rx * 80 + (Rx * 800 / 20) * i
@@ -156,6 +158,8 @@
         Dim tmp0 As Single = 0
         Dim Tmp1 As Single = CSng(HistLMax / ValidL)
         Dim tmp2 As Single = CSng(HistRMax / ValidR)
+        If ValidL = 0 Then Tmp1 = 0 Else Tmp1 = CSng(HistLMax / ValidL)
+        If ValidR = 0 Then tmp2 = 0 Else tmp2 = CSng(HistRMax / ValidR)
         Dim ValidMax As Integer = 0
         If Tmp1 > tmp2 Then
             tmp0 = Tmp1
@@ -204,7 +208,7 @@
                 Dim x1 As Single = CSng(100 + (800 / 20) * (i - 1) + 10)
                 g.DrawLine(PenL, Rx * x1, Ry * 899, Rx * x1, Ry * (800 - (HistL(i) / Digit) * 800 + 99))
             End If
-            If Item <> 5 Then
+            If Item <> 5 Or Item <> 6 Then
                 If HistR(i) > 0 Then
                     Dim x1 As Single = CSng(100 + (800 / 20) * (i - 1) + 30)
                     g.DrawLine(PenR, Rx * x1, Ry * 899, Rx * x1, Ry * (800 - (HistR(i) / Digit) * 800 + 99))
@@ -221,7 +225,6 @@
         g.DrawLine(Pen1, Rx * (x2 - 50), Ry * 200, Rx * x2, Ry * 200)
         g.DrawString(frmMain.ColumnSetDecimal(hl, 2), df, db, Rx * (x2 - 20), Ry * 135)
     End Sub
-
 
     Private Sub cbxCh2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxCh2.SelectedIndexChanged
         If frmMain.StackCounter > 0 Then
