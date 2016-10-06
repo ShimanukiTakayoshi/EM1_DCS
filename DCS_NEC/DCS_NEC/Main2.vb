@@ -106,7 +106,7 @@ Public Class frmMain
 
     Public GraphSelect As Boolean = True
     Public TrCounter(30) As Long
-    Public TrData(37, 1000) As Single
+    Public TrData(39, 1000) As Single
     Public TrAve As Integer = 10
     Public TrCo As Long
     Public Gouki As Integer
@@ -551,13 +551,18 @@ Public Class frmMain
         Dim gl As Single = CSng(TypeData(TypeCode, Item * 4 + 4))   'グラフ下限値取得
         Dim gh As Single = CSng(TypeData(TypeCode, Item * 4 + 5))   'グラフ上限値取得
         Dim Div As Single = (gh - gl) / 20                          '分割幅取得
+        '画面ちらつき対策
+        Dim currentContext As BufferedGraphicsContext
+        Dim myBuffer As BufferedGraphics
+        currentContext = BufferedGraphicsManager.Current
+        myBuffer = currentContext.Allocate(picHist0.CreateGraphics(), New Rectangle(0, 0, 603, 295 + 15))
+        Dim g As Graphics = myBuffer.Graphics
         '分布図スケール初期設定
         Dim Rx As Single = CSng(picHist0.Size.Width / 1000)
         Dim Ry As Single = CSng(picHist0.Size.Height / 1000)
         Dim Pen1 As Pen = New Pen(Color.Black, 1)
-        Dim g As Graphics = picHist0.CreateGraphics
-        g.Clear(Color.White)
         ''外枠を描く
+        g.Clear(Color.White)
         g.DrawRectangle(Pen1, 0, 0, Rx * 1000 - 1, Ry * 1000 - 1)
         g.DrawRectangle(Pen1, Rx * 100, Ry * 100, Rx * 800, Ry * 800)
         'Ｘ軸分割線を描く
@@ -593,26 +598,33 @@ Public Class frmMain
         Dim dsx As String = ColumnSetDecimal(gl, 1)
         Dim dfx As New Font("ＭＳゴシック", 8)
         Dim dbx As New SolidBrush(Color.Black)
-        g.DrawString(ColumnSetDecimal(gl, 2), dfx, dbx, Rx * 35, Ry * 880)
-        g.DrawString(ColumnSetDecimal(gh, 2), dfx, dbx, Rx * 35, Ry * 80)
         Select Case Item
-            Case 0 To 1
+            Case 0, 1, 5
                 g.DrawString("[V]", dfx, dbx, Rx * 40, Ry * 35)
-            Case 2 To 3
+                g.DrawString(ColumnSetDecimal(gl, 1), dfx, dbx, Rx * 35, Ry * 880)
+                g.DrawString(ColumnSetDecimal(gh, 1), dfx, dbx, Rx * 35, Ry * 80)
+            Case 2, 3
                 g.DrawString("[x9.8mN]", dfx, dbx, Rx * 40, Ry * 35)
-            Case Else
+                g.DrawString(ColumnSetDecimal(gl, 1), dfx, dbx, Rx * 35, Ry * 880)
+                g.DrawString(ColumnSetDecimal(gh, 1), dfx, dbx, Rx * 35, Ry * 80)
+            Case 4
                 g.DrawString("[mm]", dfx, dbx, Rx * 40, Ry * 35)
+                g.DrawString(ColumnSetDecimal(gl, 2), dfx, dbx, Rx * 35, Ry * 880)
+                g.DrawString(ColumnSetDecimal(gh, 2), dfx, dbx, Rx * 35, Ry * 80)
+            Case Else
+                g.DrawString("[mΩ]", dfx, dbx, Rx * 40, Ry * 35)
+                g.DrawString(ColumnSetDecimal(gl, 0), dfx, dbx, Rx * 35, Ry * 880)
+                g.DrawString(ColumnSetDecimal(gh, 0), dfx, dbx, Rx * 35, Ry * 80)
         End Select
         For i As Integer = 2 To 19 Step 2
             Dim y1 As Single = Ry * 80 + (Ry * 800 / 20) * (20 - i)
             g.DrawString(ColumnSetDecimal(gl + Div * i, 2), dfx, dbx, Rx * 35, y1)
         Next i
-        '
+        '推移データプロット
         Dim PenL As Pen = New Pen(Color.DarkOliveGreen, Rx * 3)
         Dim PenR As Pen = New Pen(Color.DarkOrange, Rx * 3)
         If TrCo > 2 Then
             Dim Digit As Single = 800 / (gh - gl)
-            'Digit = 1
             Dim L0 As Single
             Dim L1 As Single
             Dim R0 As Single
@@ -623,62 +635,68 @@ Public Class frmMain
             Dim XR1 As Single
             If ch = 0 Then
                 For i As Integer = 1 To CInt(TrCo - 1)
-                    If Item = 0 Or Item = 1 Or Item = 5 Then
-                        If Item = 5 Then
-                            L0 = TrData(Item * 6 + 0 + 6, i - 1)
-                            L1 = TrData(Item * 6 + 0 + 6, i)
-                            'R0 = TrData(Item * 6 + 1 + 6, i - 1)
-                            'R1 = TrData(Item * 6 + 1 + 6, i)
-                        Else
+                    Select Case Item
+                        Case 0, 1
                             L0 = TrData(Item * 6 + 4 + 6, i - 1)
                             L1 = TrData(Item * 6 + 4 + 6, i)
                             R0 = TrData(Item * 6 + 5 + 6, i - 1)
                             R1 = TrData(Item * 6 + 5 + 6, i)
-                        End If
-                    Else
-                        L0 = (TrData(Item * 6 + 6, i - 1) + TrData(Item * 6 + 2 + 6, i - 1) + TrData(Item * 6 + 4 + 6, i - 1)) / 3
-                        L1 = (TrData(Item * 6 + 6, i) + TrData(Item * 6 + 2 + 6, i) + TrData(Item * 6 + 4 + 6, i)) / 3
-                        R0 = (TrData(Item * 6 + 1 + 6, i - 1) + TrData(Item * 6 + 3 + 6, i - 1) + TrData(Item * 6 + 5 + 6, i - 1)) / 3
-                        R1 = (TrData(Item * 6 + 1 + 6, i) + TrData(Item * 6 + 3 + 6, i) + TrData(Item * 6 + 5 + 6, i)) / 3
-                    End If
-                        XL0 = Ry * (900 - (L0 - gl) * Digit)
-                        XL1 = Ry * (900 - (L1 - gl) * Digit)
+                        Case 5
+                            L0 = TrData(Item * 6 + 0 + 6, i - 1)
+                            L1 = TrData(Item * 6 + 0 + 6, i)
+                        Case 6
+                            L0 = (TrData(Item * 6 + 1, i - 1) + TrData(Item * 6 + 2, i - 1) + TrData(Item * 6 + 3, i - 1)) / 3
+                            L1 = (TrData(Item * 6 + 1, i) + TrData(Item * 6 + 2, i) + TrData(Item * 6 + 3, i)) / 3
+                        Case Else
+                            L0 = (TrData(Item * 6 + 6, i - 1) + TrData(Item * 6 + 2 + 6, i - 1) + TrData(Item * 6 + 4 + 6, i - 1)) / 3
+                            L1 = (TrData(Item * 6 + 6, i) + TrData(Item * 6 + 2 + 6, i) + TrData(Item * 6 + 4 + 6, i)) / 3
+                            R0 = (TrData(Item * 6 + 1 + 6, i - 1) + TrData(Item * 6 + 3 + 6, i - 1) + TrData(Item * 6 + 5 + 6, i - 1)) / 3
+                            R1 = (TrData(Item * 6 + 1 + 6, i) + TrData(Item * 6 + 3 + 6, i) + TrData(Item * 6 + 5 + 6, i)) / 3
+                    End Select
+                    If Item <> 5 And Item <> 6 Then
                         XR0 = Ry * (900 - (R0 - gl) * Digit)
                         XR1 = Ry * (900 - (R1 - gl) * Digit)
-                        g.DrawLine(PenL, Rx * (100 + i), XL0, Rx * (100 + i + 1), XL1)
                         g.DrawLine(PenR, Rx * (100 + i), XR0, Rx * (100 + i + 1), XR1)
+                    End If
+                    XL0 = Ry * (900 - (L0 - gl) * Digit)
+                    XL1 = Ry * (900 - (L1 - gl) * Digit)
+                    g.DrawLine(PenL, Rx * (100 + i), XL0, Rx * (100 + i + 1), XL1)
                 Next
             Else
                 If (Item <> 0 And Item <> 1 And Item <> 5) Or (Item = 0 And ch = 3) Or (Item = 1 And ch = 3) Or (Item = 5 And ch = 3) Then
                     For i As Integer = 1 To CInt(TrCo - 1)
-                        If Item = 0 Or Item = 1 Or Item = 5 Then
-                            If Item = 5 Then
-                                L0 = TrData(Item * 6 + 0 + 6, i - 1)
-                                L1 = TrData(Item * 6 + 0 + 6, i)
-                                'R0 = TrData(Item * 6 + 1 + 6, i - 1)
-                                'R1 = TrData(Item * 6 + 1 + 6, i)
-                            Else
+                        Select Case Item
+                            Case 0, 1
                                 L0 = TrData(Item * 6 + 4 + 6, i - 1)
                                 L1 = TrData(Item * 6 + 4 + 6, i)
                                 R0 = TrData(Item * 6 + 5 + 6, i - 1)
                                 R1 = TrData(Item * 6 + 5 + 6, i)
-                            End If
-                        Else
-                            L0 = TrData(Item * 6 + (ch - 1) * 2 + 6, i - 1)
-                            L1 = TrData(Item * 6 + (ch - 1) * 2 + 6, i)
-                            R0 = TrData(Item * 6 + (ch - 1) * 2 + 1 + 6, i - 1)
-                            R1 = TrData(Item * 6 + (ch - 1) * 2 + 1 + 6, i)
-                        End If
-                            XL0 = Ry * (900 - (L0 - gl) * Digit)
-                            XL1 = Ry * (900 - (L1 - gl) * Digit)
+                            Case 5
+                                L0 = TrData(Item * 6 + 0 + 6, i - 1)
+                                L1 = TrData(Item * 6 + 0 + 6, i)
+                            Case 6
+                                L0 = (TrData(Item * 6 + ch, i - 1))
+                                L1 = (TrData(Item * 6 + ch, i))
+                            Case Else
+                                L0 = TrData(Item * 6 + (ch - 1) * 2 + 6, i - 1)
+                                L1 = TrData(Item * 6 + (ch - 1) * 2 + 6, i)
+                                R0 = TrData(Item * 6 + (ch - 1) * 2 + 1 + 6, i - 1)
+                                R1 = TrData(Item * 6 + (ch - 1) * 2 + 1 + 6, i)
+                        End Select
+                        If Item <> 5 And Item <> 6 Then
                             XR0 = Ry * (900 - (R0 - gl) * Digit)
                             XR1 = Ry * (900 - (R1 - gl) * Digit)
-                            g.DrawLine(PenL, Rx * (100 + i), XL0, Rx * (100 + i + 1), XL1)
                             g.DrawLine(PenR, Rx * (100 + i), XR0, Rx * (100 + i + 1), XR1)
+                        End If
+                        XL0 = Ry * (900 - (L0 - gl) * Digit)
+                        XL1 = Ry * (900 - (L1 - gl) * Digit)
+                        g.DrawLine(PenL, Rx * (100 + i), XL0, Rx * (100 + i + 1), XL1)
                     Next
                 End If
             End If
         End If
+        'ダブルバッファー表示
+        myBuffer.Render()
     End Sub
 
     Public Sub StackDataShift()
@@ -955,7 +973,7 @@ Public Class frmMain
             End Select
         Next
         '推移グラフ用平均データ取得
-        For i As Integer = 6 To 37
+        For i As Integer = 6 To 39
             Dim tmp As Single
             Dim co As Integer = 0
             For j As Integer = 0 To TrAve - 1
@@ -976,7 +994,7 @@ Public Class frmMain
         TrCo += 1
         If TrCo > 700 Then
             TrCo = 700
-            For i As Integer = 0 To 37
+            For i As Integer = 0 To 39
                 For j As Integer = 0 To 700
                     TrData(i, j) = TrData(i, j + 1)
                 Next
