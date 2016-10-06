@@ -598,27 +598,32 @@ Public Class frmMain
         Dim dsx As String = ColumnSetDecimal(gl, 1)
         Dim dfx As New Font("ＭＳゴシック", 8)
         Dim dbx As New SolidBrush(Color.Black)
+        Dim keta As Integer = 0
         Select Case Item
             Case 0, 1, 5
+                keta = 1
                 g.DrawString("[V]", dfx, dbx, Rx * 40, Ry * 35)
-                g.DrawString(ColumnSetDecimal(gl, 1), dfx, dbx, Rx * 35, Ry * 880)
-                g.DrawString(ColumnSetDecimal(gh, 1), dfx, dbx, Rx * 35, Ry * 80)
+                g.DrawString(ColumnSetDecimal(gl, keta), dfx, dbx, Rx * 35, Ry * 880)
+                g.DrawString(ColumnSetDecimal(gh, keta), dfx, dbx, Rx * 35, Ry * 80)
             Case 2, 3
+                keta = 1
                 g.DrawString("[x9.8mN]", dfx, dbx, Rx * 40, Ry * 35)
-                g.DrawString(ColumnSetDecimal(gl, 1), dfx, dbx, Rx * 35, Ry * 880)
-                g.DrawString(ColumnSetDecimal(gh, 1), dfx, dbx, Rx * 35, Ry * 80)
+                g.DrawString(ColumnSetDecimal(gl, keta), dfx, dbx, Rx * 35, Ry * 880)
+                g.DrawString(ColumnSetDecimal(gh, keta), dfx, dbx, Rx * 35, Ry * 80)
             Case 4
+                keta = 2
                 g.DrawString("[mm]", dfx, dbx, Rx * 40, Ry * 35)
-                g.DrawString(ColumnSetDecimal(gl, 2), dfx, dbx, Rx * 35, Ry * 880)
-                g.DrawString(ColumnSetDecimal(gh, 2), dfx, dbx, Rx * 35, Ry * 80)
+                g.DrawString(ColumnSetDecimal(gl, keta), dfx, dbx, Rx * 35, Ry * 880)
+                g.DrawString(ColumnSetDecimal(gh, keta), dfx, dbx, Rx * 35, Ry * 80)
             Case Else
+                keta = 0
                 g.DrawString("[mΩ]", dfx, dbx, Rx * 40, Ry * 35)
-                g.DrawString(ColumnSetDecimal(gl, 0), dfx, dbx, Rx * 35, Ry * 880)
-                g.DrawString(ColumnSetDecimal(gh, 0), dfx, dbx, Rx * 35, Ry * 80)
+                g.DrawString(ColumnSetDecimal(gl, keta), dfx, dbx, Rx * 35, Ry * 880)
+                g.DrawString(ColumnSetDecimal(gh, keta), dfx, dbx, Rx * 35, Ry * 80)
         End Select
         For i As Integer = 2 To 19 Step 2
             Dim y1 As Single = Ry * 80 + (Ry * 800 / 20) * (20 - i)
-            g.DrawString(ColumnSetDecimal(gl + Div * i, 2), dfx, dbx, Rx * 35, y1)
+            g.DrawString(ColumnSetDecimal(gl + Div * i, keta), dfx, dbx, Rx * 35, y1)
         Next i
         '推移データプロット
         Dim PenL As Pen = New Pen(Color.DarkOliveGreen, Rx * 3)
