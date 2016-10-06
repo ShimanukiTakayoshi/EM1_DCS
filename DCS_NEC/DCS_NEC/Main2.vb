@@ -407,11 +407,17 @@ Public Class frmMain
                 End If
             Next
         Next
+        '画面ちらつき対策
+        Dim currentContext As BufferedGraphicsContext
+        Dim myBuffer As BufferedGraphics
+        currentContext = BufferedGraphicsManager.Current
+        myBuffer = currentContext.Allocate(picHist0.CreateGraphics(), New Rectangle(0, 0, 603, 295 + 15))
+        Dim g As Graphics = myBuffer.Graphics
         '分布図スケール初期設定
         Dim Rx As Single = CSng(picHist0.Size.Width / 1000)
         Dim Ry As Single = CSng(picHist0.Size.Height / 1000)
         Dim Pen1 As Pen = New Pen(Color.Black, 1)
-        Dim g As Graphics = picHist0.CreateGraphics
+        'Dim g As Graphics = picHist0.CreateGraphics
         g.Clear(Color.White)
         ''外枠を描く
         g.DrawRectangle(Pen1, 0, 0, Rx * 1000 - 1, Ry * 1000 - 1)
@@ -531,6 +537,8 @@ Public Class frmMain
         g.DrawLine(Pen1, Rx * x2, Ry * 899, Rx * x2, Ry * 200)
         g.DrawLine(Pen1, Rx * (x2 - 50), Ry * 200, Rx * x2, Ry * 200)
         g.DrawString(ColumnSetDecimal(hl, 2), df, db, Rx * (x2 - 20), Ry * 135)
+        'ダブルバッファー表示
+        myBuffer.Render()
     End Sub
 
     Public Sub Transition()
