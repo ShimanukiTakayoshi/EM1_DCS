@@ -23,7 +23,9 @@ Partial Class frmPlcMonitor
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.dgvPM = New System.Windows.Forms.DataGridView()
+        Me.dgvPM2 = New System.Windows.Forms.DataGridView()
         CType(Me.dgvPM, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dgvPM2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'dgvPM
@@ -32,22 +34,34 @@ Partial Class frmPlcMonitor
         Me.dgvPM.Location = New System.Drawing.Point(12, 12)
         Me.dgvPM.Name = "dgvPM"
         Me.dgvPM.RowTemplate.Height = 21
-        Me.dgvPM.Size = New System.Drawing.Size(609, 437)
+        Me.dgvPM.Size = New System.Drawing.Size(235, 645)
         Me.dgvPM.TabIndex = 0
+        '
+        'dgvPM2
+        '
+        Me.dgvPM2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvPM2.Location = New System.Drawing.Point(264, 12)
+        Me.dgvPM2.Name = "dgvPM2"
+        Me.dgvPM2.RowTemplate.Height = 21
+        Me.dgvPM2.Size = New System.Drawing.Size(100, 645)
+        Me.dgvPM2.TabIndex = 1
         '
         'frmPlcMonitor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(629, 454)
+        Me.ClientSize = New System.Drawing.Size(1045, 867)
         Me.ControlBox = False
+        Me.Controls.Add(Me.dgvPM2)
         Me.Controls.Add(Me.dgvPM)
         Me.MaximizeBox = False
         Me.Name = "frmPlcMonitor"
         Me.Text = "PlcMonitor"
         CType(Me.dgvPM, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dgvPM2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
     Friend WithEvents dgvPM As System.Windows.Forms.DataGridView
+    Friend WithEvents dgvPM2 As System.Windows.Forms.DataGridView
 End Class

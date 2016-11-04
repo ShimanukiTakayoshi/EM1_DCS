@@ -48,8 +48,14 @@ Public Class frmMain
     Public Sheet2FirstFlag As Boolean = True    'DGV初回フラグ(ch2データシート表示)
     Public Sheet3FirstFlag As Boolean = True    'DGV初回フラグ(ch3データシート表示)
     Public StartFlag As Boolean = False         '収集開始フラグ
-    Public DummyDataFlag As Boolean = True        'デバッグ用ダミーデータ使用フラグ
-    Public DebugFlag As Boolean = True   'デバッグモードフラグ
+    Public DummyDataFlag As Boolean = False     'デバッグ用ダミーデータ使用フラグ
+    Public DebugFlag As Boolean = True          'デバッグモードフラグ
+    Public VirtualMcFlag As Boolean = True      'デバッグ用仮想装置フラグ
+    Public ViRs(99) As String                   'デバッグ用仮想装置受信エリア
+    Public ViSt(6, 99) As String                'デバッグ用仮想装置シフトエリア
+    Public ViTmp(99) As String                  'デバッグ用仮想装置Ｔｍｐエリア
+    Public ViTr(99) As String                   'デバッグ用仮想装置転送エリア
+    Public ViDataCounter As Integer = 0         'デバッグ用仮想装置データーカウンター
     Public PlcMonitorFlag As Boolean = False    'PLCモニターフラグ
 
     Public LimOVLo As Single = 0    '収集該当機種OV下限規格値
@@ -89,6 +95,7 @@ Public Class frmMain
     Public St6a(100) As String
     Public TmpArea1(100) As String
     Public StackArea1(100) As String
+    Public Dm(1000) As String
     'Public St1b(100) As String
     'Public St2b(100) As String
     'Public St3b(100) As String
@@ -175,63 +182,341 @@ Public Class frmMain
     End Sub
 
     Public Sub PlcMonitor()
-        Dim tmp1 As String
-        '搬送PLCｺﾝﾄﾛｰﾗｰﾘﾝｸ通信エリア
-        tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 10000, 50))
-        For i As Integer = 0 To 49
-            D10000(i) = AscCng4(Strings.Mid(tmp1, i * 4 + 1, 4))
+        Dim TmpX(1000) As Integer
+        If DebugFlag = False Then
+            Try
+                TmpX = SysmacCJ1.ReadMemoryWordInteger(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11200, 800, OMRON.Compolet.SYSMAC.SysmacPlc.DataTypes.BIN)
+            Catch ex As Exception
+                If MsgBox("PLC－PC通信ｴﾗｰ" & vbCr & "DCSを終了してよいですか？", CType(vbOKCancel + vbExclamation, MsgBoxStyle)) = vbOK Then
+                    Application.Exit()
+                End If
+            End Try
+        End If
+
+        'Dim tmp1 As String
+        ''搬送PLCｺﾝﾄﾛｰﾗｰﾘﾝｸ通信エリア
+        'tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11000, 999))
+        'For i As Integer = 0 To 999
+        '    Try
+        '        Dm(i) = Strings.Mid(tmp1, i * 4 + 1, 4)
+        '    Catch ex As Exception
+        '        Dm(i) = "----"
+        '    End Try
+        'Next
+        ' ''搬送PLCｺﾝﾄﾛｰﾗｰﾘﾝｸ通信エリア
+        'tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 10000, 52))
+        'For i As Integer = 0 To 50
+        '    D10000(i) = AscCng4(Strings.Mid(tmp1, i * 4 + 1, 4))
+        'Next
+        ''計測器データ受信エリア
+        'tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11200, 52))
+        'For i As Integer = 0 To 50
+        '    D13440(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
+        'Next
+        ''シフトエリアＳＴ４
+        'tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11250, 50))
+        'For i As Integer = 0 To 49
+        '    St1a(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
+        'Next
+        ''シフトエリアＳＴ２
+        'tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11300, 50))
+        'For i As Integer = 0 To 49
+        '    St2a(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
+        'Next
+        ''シフトエリアＳＴ３
+        'tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11350, 50))
+        'For i As Integer = 0 To 49
+        '    St3a(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
+        'Next
+        ''シフトエリアＳＴ５
+        'tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11400, 50))
+        'For i As Integer = 0 To 49
+        '    St5a(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
+        'Next
+        ''シフトエリアＳＴ６
+        'tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11900, 50))
+        'For i As Integer = 0 To 49
+        '    St6a(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
+        'Next
+        ''ＴＭＰエリア
+        'tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11450, 50))
+        'For i As Integer = 0 To 49
+        '    TmpArea1(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
+        'Next
+        ''スタックエリア先頭
+        'tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11500, 50))
+        'For i As Integer = 0 To 49
+        '    StackArea1(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
+        'Next
+    End Sub
+
+    Public Sub VirtualMc()
+        '受信エリアデータデータセット
+        ViRs(1) = GetData(10)
+        ViRs(2) = GetData(11)
+        ViRs(3) = GetData(16)
+        ViRs(4) = GetData(17)
+        ViRs(5) = GetData(36)
+        ViRs(6) = GetData(37)
+        ViRs(7) = GetData(38)
+        ViRs(8) = GetData(39)
+        ViRs(9) = GetData(18)
+        ViRs(10) = GetData(19)
+        ViRs(11) = GetData(24)
+        ViRs(12) = GetData(25)
+        ViRs(13) = GetData(30)
+        ViRs(14) = GetData(31)
+        ViRs(15) = GetData(20)
+        ViRs(16) = GetData(21)
+        ViRs(17) = GetData(26)
+        ViRs(18) = GetData(27)
+        ViRs(19) = GetData(32)
+        ViRs(20) = GetData(33)
+        ViRs(21) = GetData(22)
+        ViRs(22) = GetData(23)
+        ViRs(23) = GetData(28)
+        ViRs(24) = GetData(29)
+        ViRs(25) = GetData(34)
+        ViRs(26) = GetData(35)
+        ViRs(27) = GetData(40)
+        ViRs(28) = GetData(41)
+        ViRs(29) = GetData(42)
+        ViRs(30) = GetData(43)
+        ViRs(31) = GetData(44)
+        ViRs(32) = GetData(45)
+        ViRs(33) = GetData(46)
+        ViRs(34) = GetData(47)
+        ViRs(35) = GetData(48)
+        ViRs(36) = GetData(49)
+        ViRs(37) = GetData(50)
+        ViRs(38) = GetData(51)
+        ViRs(39) = GetData(70)
+        ViRs(40) = GetData(71)
+        ViRs(41) = GetData(72)
+        ViRs(42) = GetData(73)
+        ViRs(43) = GetData(52)
+        ViRs(44) = GetData(53)
+        ViRs(45) = GetData(58)
+        ViRs(46) = GetData(59)
+        ViRs(47) = GetData(64)
+        ViRs(48) = GetData(65)
+        ViRs(49) = GetData(54)
+        ViRs(50) = GetData(55)
+        ViRs(51) = GetData(60)
+        ViRs(52) = GetData(61)
+        ViRs(53) = GetData(66)
+        ViRs(54) = GetData(67)
+        ViRs(55) = GetData(56)
+        ViRs(56) = GetData(57)
+        ViRs(57) = GetData(62)
+        ViRs(58) = GetData(63)
+        ViRs(59) = GetData(68)
+        ViRs(60) = GetData(69)
+        'シフトエリアデータデータセット
+        ViSt(1, 1) = ViRs(1)
+        ViSt(1, 2) = ViRs(2)
+        ViSt(1, 3) = ViRs(3)
+        ViSt(1, 4) = ViRs(4)
+        ViSt(1, 5) = ViRs(5)
+        ViSt(1, 6) = ViRs(6)
+        ViSt(1, 7) = ViRs(7)
+        ViSt(1, 8) = ViRs(8)
+        ViSt(2, 9) = ViRs(9)
+        ViSt(2, 10) = ViRs(10)
+        ViSt(2, 11) = ViRs(11)
+        ViSt(2, 12) = ViRs(12)
+        ViSt(2, 13) = ViRs(13)
+        ViSt(2, 14) = ViRs(14)
+        ViSt(3, 15) = ViRs(15)
+        ViSt(3, 16) = ViRs(16)
+        ViSt(3, 17) = ViRs(17)
+        ViSt(3, 18) = ViRs(18)
+        ViSt(3, 19) = ViRs(19)
+        ViSt(3, 20) = ViRs(20)
+        ViSt(5, 21) = ViRs(21)
+        ViSt(5, 22) = ViRs(22)
+        ViSt(5, 23) = ViRs(23)
+        ViSt(5, 24) = ViRs(24)
+        ViSt(5, 25) = ViRs(25)
+        ViSt(5, 26) = ViRs(26)
+        ViSt(1, 27) = ViRs(27)
+        ViSt(1, 28) = ViRs(28)
+        ViSt(1, 29) = ViRs(29)
+        ViSt(1, 30) = ViRs(30)
+        ViSt(1, 31) = ViRs(31)
+        ViSt(1, 32) = ViRs(32)
+        ViSt(1, 33) = ViRs(33)
+        ViSt(1, 34) = ViRs(34)
+        ViSt(1, 35) = ViRs(35)
+        ViSt(1, 36) = ViRs(36)
+        ViSt(1, 37) = ViRs(37)
+        ViSt(1, 38) = ViRs(38)
+        ViSt(1, 39) = ViRs(39)
+        ViSt(1, 40) = ViRs(40)
+        ViSt(1, 41) = ViRs(41)
+        ViSt(1, 42) = ViRs(42)
+        ViSt(2, 43) = ViRs(43)
+        ViSt(2, 44) = ViRs(44)
+        ViSt(2, 45) = ViRs(45)
+        ViSt(2, 46) = ViRs(46)
+        ViSt(2, 47) = ViRs(47)
+        ViSt(2, 48) = ViRs(48)
+        ViSt(3, 49) = ViRs(49)
+        ViSt(3, 50) = ViRs(50)
+        ViSt(3, 51) = ViRs(51)
+        ViSt(3, 52) = ViRs(52)
+        ViSt(3, 53) = ViRs(53)
+        ViSt(3, 54) = ViRs(54)
+        ViSt(5, 55) = ViRs(55)
+        ViSt(5, 56) = ViRs(56)
+        ViSt(5, 57) = ViRs(57)
+        ViSt(5, 58) = ViRs(58)
+        ViSt(5, 59) = ViRs(59)
+        ViSt(5, 60) = ViRs(60)
+        'データーシフト
+        For i As Short = 6 To 1 Step -1
+            For j As Short = 0 To 99
+                ViSt(i, j) = ViSt(i - 1, j)
+            Next
         Next
-        '計測器データ受信エリア
-        tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11200, 50))
-        For i As Integer = 0 To 49
-            D13450(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
+        'Tmpエリアデーター転送
+        For i As Short = 0 To 99
+            ViTmp(i) = ViSt(6, i)
         Next
-        'シフトエリアＳＴ４
-        tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11250, 50))
-        For i As Integer = 0 To 49
-            St1a(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
+        '読出しエリアへ転送
+        'No.0：[通し番号]生成
+        ViDataCounter += 1
+        ViTr(0) = ColumnSet(Str(ViDataCounter), 8)
+        'No.1：[日付]生成
+        Dim year As Integer
+        Dim month As Integer
+        Dim day As Integer
+        year = CInt(Rnd(1) * 30)
+        month = CInt((Rnd(1) * 12) + 1)
+        day = CInt((Rnd(1) * 30) + 1)
+        ViTr(1) = "" + ZeroPat(Str$(year), 2) + "/" + ZeroPat(Str$(month), 2) + "/" + ZeroPat(Str$(day), 2)
+        'No.2：[時間]生成
+        Dim Hour As Integer
+        Dim Minute As Integer
+        Dim Second As Integer
+        Hour = CInt(Rnd(1) * 24)
+        Minute = CInt(Rnd(1) * 60)
+        Second = CInt(Rnd(1) * 60)
+        ViTr(2) = ZeroPat(Str$(Hour), 2) + ":" + ZeroPat(Str$(Minute), 2) + ":" + ZeroPat(Str$(Second), 2)
+        'No.6～9:[PV ch1～2L/R(OK/NG)]生成
+        ViTr(6) = ViTmp(27)
+        ViTr(7) = ViTmp(28)
+        ViTr(8) = ViTmp(29)
+        ViTr(9) = ViTmp(30)
+        ViTr(40) = ViTmp(27)
+        ViTr(41) = ViTmp(28)
+        ViTr(42) = ViTmp(29)
+        ViTr(43) = ViTmp(30)
+        'No.10～11:[PV ch3L/R(実測値)]生成
+        ViTr(10) = ViTmp(1)
+        ViTr(11) = ViTmp(2)
+        ViTr(44) = ViTmp(31)
+        ViTr(45) = ViTmp(32)
+        'No.12～15:[DV ch1～2L/R(OK/NG)]生成
+        ViTr(12) = ViTmp(33)
+        ViTr(13) = ViTmp(34)
+        ViTr(14) = ViTmp(35)
+        ViTr(15) = ViTmp(36)
+        ViTr(46) = ViTmp(33)
+        ViTr(47) = ViTmp(34)
+        ViTr(48) = ViTmp(35)
+        ViTr(49) = ViTmp(36)
+        'No.16～17:[DV ch3L/R(実測値)]生成
+        ViTr(16) = ViTmp(3)
+        ViTr(17) = ViTmp(4)
+        ViTr(50) = ViTmp(37)
+        ViTr(51) = ViTmp(38)
+        'No.18～23:[NOCP ch1～3L/R]生成
+        ViTr(18) = ViTmp(9)
+        ViTr(19) = ViTmp(10)
+        ViTr(20) = ViTmp(15)
+        ViTr(21) = ViTmp(16)
+        ViTr(22) = ViTmp(21)
+        ViTr(23) = ViTmp(22)
+        ViTr(52) = ViTmp(43)
+        ViTr(53) = ViTmp(44)
+        ViTr(54) = ViTmp(49)
+        ViTr(55) = ViTmp(50)
+        ViTr(56) = ViTmp(55)
+        ViTr(57) = ViTmp(56)
+        'No.24～29:[NCCP ch1～3L/R]生成
+        ViTr(24) = ViTmp(11)
+        ViTr(25) = ViTmp(12)
+        ViTr(26) = ViTmp(17)
+        ViTr(27) = ViTmp(18)
+        ViTr(28) = ViTmp(23)
+        ViTr(29) = ViTmp(24)
+        ViTr(58) = ViTmp(45)
+        ViTr(59) = ViTmp(46)
+        ViTr(60) = ViTmp(51)
+        ViTr(61) = ViTmp(52)
+        ViTr(62) = ViTmp(57)
+        ViTr(63) = ViTmp(58)
+        'No.30～35:[CG ch1～3L/R]生成
+        ViTr(30) = ViTmp(13)
+        ViTr(31) = ViTmp(14)
+        ViTr(32) = ViTmp(19)
+        ViTr(33) = ViTmp(20)
+        ViTr(34) = ViTmp(25)
+        ViTr(35) = ViTmp(26)
+        ViTr(64) = ViTmp(47)
+        ViTr(65) = ViTmp(48)
+        ViTr(66) = ViTmp(53)
+        ViTr(67) = ViTmp(54)
+        ViTr(68) = ViTmp(59)
+        ViTr(69) = ViTmp(60)
+        'No.36:[TSO ch3]生成
+        ViTr(36) = ViTmp(5)
+        ViTr(70) = ViTmp(39)
+        'No.37～39:[CR ch1～3]生成
+        ViTr(37) = ViTmp(6)
+        ViTr(38) = ViTmp(7)
+        ViTr(39) = ViTmp(8)
+        ViTr(71) = ViTmp(40)
+        ViTr(72) = ViTmp(41)
+        ViTr(73) = ViTmp(42)
+        'No.3～5：[判定ch1～3]生成
+        Dim judge As Boolean
+        For i As Short = 0 To 2  'ch
+            ViTr(3 + i) = "Pass"
+            judge = True
+            For j As Integer = 0 To 4   'Item(OV/RV/NC/NO/CG)
+                If ViTr(40 + i * 2 + j * 6) = "NG" Or ViTr(40 + i * 2 + j * 6 + 1) = "NG" Then
+                    ViTr(3 + i) = "Fail"
+                    Exit For
+                End If
+            Next
         Next
-        'シフトエリアＳＴ２
-        tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11300, 50))
-        For i As Integer = 0 To 49
-            St2a(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
+        If ViTr(70) = "NG" Then ViTr(5) = "Fail" 'TSO(3chのみ)
+        If ViTr(71) = "NG" Then ViTr(3) = "Fail" 'CR1
+        If ViTr(72) = "NG" Then ViTr(4) = "Fail" 'CR2
+        If ViTr(73) = "NG" Then ViTr(5) = "Fail" 'CR3
+        '生成ダミーデータ転送
+        For i As Short = 0 To 73
+            GetData(i) = ViTr(i)
         Next
-        'シフトエリアＳＴ３
-        tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11350, 50))
-        For i As Integer = 0 To 49
-            St3a(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
-        Next
-        'シフトエリアＳＴ５
-        tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11400, 50))
-        For i As Integer = 0 To 49
-            St5a(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
-        Next
-        'シフトエリアＳＴ６
-        tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11900, 50))
-        For i As Integer = 0 To 49
-            St6a(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
-        Next
-        'ＴＭＰエリア
-        tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11450, 50))
-        For i As Integer = 0 To 49
-            TmpArea1(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
-        Next
-        'スタックエリア先頭
-        tmp1 = CStr(SysmacCJ1.ReadMemory(OMRON.Compolet.SYSMAC.SysmacCJ.MemoryTypes.DM, 11500, 50))
-        For i As Integer = 0 To 49
-            StackArea1(i) = AscCng4(Strings.Mid(tmp1, i * 8 + 1, 4)) + AscCng4(Strings.Mid(tmp1, i * 8 + 5, 4))
-        Next
-        frmPlcMonitor.PM()
+        If PlcMonitorFlag Then
+            frmPlcMonitor.PM()
+        End If
     End Sub
 
     Public Sub Main()
         'データ取得
-        If DummyDataFlag = True Then
+        If DummyDataFlag Then
             StackCounter += 1
             GetDummyData()
-        ElseIf DebugFlag = True Then
+        ElseIf DebugFlag And VirtualMcFlag = False Then
             StackCounter += 1
             GetPlcData()
+        ElseIf DebugFlag And VirtualMcFlag Then
+            StackCounter += 1
+            GetDummyData()
+            VirtualMc()
         ElseIf PlcRead(PlcDataAddress) = 1 And PlcRead(LinkAddressPlcDataGetOk) = 1 And PlcRead(LinkAddressPlcDataGetOkClear) = 0 Then
             StackCounter += 1
             GetPlcData()
@@ -1404,22 +1689,22 @@ Public Class frmMain
         Second = CInt(Rnd(1) * 60)
         DummyData(2) = ZeroPat(Str$(Hour), 2) + ":" + ZeroPat(Str$(Minute), 2) + ":" + ZeroPat(Str$(Second), 2)
         Dim i As Integer
-        'No.6～9:[PV ch2～3L/R(OK/NG)]生成
+        'No.6～9:[PV ch1～2L/R(OK/NG)]生成
         For i = 6 To 9
             DummyData(i) = DummyDataOkNg()
             DummyData(40 + i - 6) = DummyData(i)
         Next i
-        'No.10～11:[PV ch1L/R(実測値)]生成
+        'No.10～11:[PV ch3L/R(実測値)]生成
         DummyData(10) = ColumnSetDecimal((DummyDataValu(CSng(LimOVLo * 0.995), CSng(LimOVHi * 1.005))), 2)
         DummyData(11) = ColumnSetDecimal((DummyDataValu(CSng(LimOVLo * 0.995), CSng(LimOVHi * 1.005))), 2)
         If LimOVLo <= Val(DummyData(10)) And LimOVHi >= Val(DummyData(10)) Then DummyData(40 + 10 - 6) = "OK" Else DummyData(40 + 10 - 6) = "NG"
         If LimOVLo <= Val(DummyData(11)) And LimOVHi >= Val(DummyData(11)) Then DummyData(40 + 11 - 6) = "OK" Else DummyData(40 + 11 - 6) = "NG"
-        'No.12～15:[DV ch2～3L/R(OK/NG)]生成
+        'No.12～15:[DV ch1～2L/R(OK/NG)]生成
         For i = 12 To 15
             DummyData(i) = DummyDataOkNg()
             DummyData(40 + i - 6) = DummyData(i)
         Next i
-        'No.16～17:[DV ch1L/R(実測値)]生成
+        'No.16～17:[DV ch3L/R(実測値)]生成
         DummyData(16) = ColumnSetDecimal((DummyDataValu(CSng(LimRVLo * 0.995), CSng(LimRVHi * 1.005))), 2)
         DummyData(17) = ColumnSetDecimal((DummyDataValu(CSng(LimRVLo * 0.995), CSng(LimRVHi * 1.005))), 2)
         If LimRVLo <= Val(DummyData(16)) And LimRVHi >= Val(DummyData(16)) Then DummyData(40 + 16 - 6) = "OK" Else DummyData(40 + 16 - 6) = "NG"
@@ -1449,20 +1734,20 @@ Public Class frmMain
         Next i
         'No.3～5：[判定ch1～3]生成
         Dim judge As Boolean
-        For i = 0 To 2
+        For i = 0 To 2  'ch
             DummyData(3 + i) = "Pass"
             judge = True
-            For j As Integer = 0 To 4
+            For j As Integer = 0 To 4   'Item(OV/RV/NC/NO/CG)
                 If DummyData(40 + i * 2 + j * 6) = "NG" Or DummyData(40 + i * 2 + j * 6 + 1) = "NG" Then
                     DummyData(3 + i) = "Fail"
                     Exit For
                 End If
             Next
         Next
-        If DummyData(70) = "NG" Then DummyData(5) = "Fail"
-        If DummyData(71) = "NG" Then DummyData(3) = "Fail"
-        If DummyData(72) = "NG" Then DummyData(4) = "Fail"
-        If DummyData(73) = "NG" Then DummyData(5) = "Fail"
+        If DummyData(70) = "NG" Then DummyData(5) = "Fail" 'TSO(3chのみ)
+        If DummyData(71) = "NG" Then DummyData(3) = "Fail" 'CR1
+        If DummyData(72) = "NG" Then DummyData(4) = "Fail" 'CR2
+        If DummyData(73) = "NG" Then DummyData(5) = "Fail" 'CR3
         '生成ダミーデータ転送
         For i = 0 To 73
             GetData(i) = DummyData(i)
@@ -1765,7 +2050,7 @@ Public Class frmMain
 
     Public Sub Initialize()
         'frmMain 設定
-        Me.Width = 1800 '1024
+        Me.Width = 1024 '1800 '1024
         Me.Height = 405 + 16 '768
         Me.FormBorderStyle = FormBorderStyle.FixedSingle
         'dgvYield 設定
@@ -1775,11 +2060,11 @@ Public Class frmMain
         dgvData.Width = 385
         dgvData.Height = 181 + 16 + 16
         'Sheet 設定
-        Sheet.Width = 813 + 180 + 660
-        Sheet.Height = 295 + 64 - 32 + 200
+        Sheet.Width = 813 + 180 ' + 660
+        Sheet.Height = 295 + 64 - 32 ' + 200
         'picHist0 設定
         picHist0.Width = 411 + 192
-        picHist0.Height = 282 + 13 + 16
+        picHist0.Height = 282 + 13 + 15
         'データシートの項目名設定
         ItemName(0) = "No."
         ItemName(1) = "Date"
@@ -2188,13 +2473,13 @@ Public Class frmMain
     End Sub
 
     Private Sub mnuTotalDataSheetOpen_Click(sender As Object, e As EventArgs) Handles mnuTotalDataSheetOpen.Click
-        Me.Width = 1800 '1024
-        Me.Height = 730 + 200 '768
+        Me.Width = 1024 '1800 '1024
+        Me.Height = 768 ' 730 + 200 '768
     End Sub
 
     Private Sub mnuTotalDataSheetClose_Click(sender As Object, e As EventArgs) Handles mnuTotalDataSheetClose.Click
         Me.Width = 1024
-        Me.Height = 405
+        Me.Height = 405 + 16
     End Sub
 
     Private Sub timPlcScan_Tick(sender As Object, e As EventArgs) Handles timPlcScan.Tick
@@ -2206,10 +2491,10 @@ Public Class frmMain
     End Sub
 
     Private Sub timHeartPulse_Tick(sender As Object, e As EventArgs) Handles timHeartPulse.Tick
+        If PlcMonitorFlag = True Then
+            PlcMonitor()
+        End If
         If DebugFlag = False Then
-            If PlcMonitorFlag = True Then
-                PlcMonitor()
-            End If
             If PlcRead(LinkAddressAppStart) = 0 Then
                 PlcWrite(LinkAddressAppStart, 1)
             Else
@@ -2220,13 +2505,17 @@ Public Class frmMain
 
     Private Sub mnuPlcMonitorOpen_Click(sender As Object, e As EventArgs) Handles mnuPlcMonitorOpen.Click
         PlcMonitorFlag = True
-        PlcWrite(LinkAddressPlcMonitor, 1)
+        If DebugFlag = False Then
+            PlcWrite(LinkAddressPlcMonitor, 1)
+        End If
         frmPlcMonitor.Show()
     End Sub
 
     Private Sub mnuPlcMonitorClose_Click(sender As Object, e As EventArgs) Handles mnuPlcMonitorClose.Click
         PlcMonitorFlag = False
-        PlcWrite(LinkAddressPlcMonitor, 0)
+        If DebugFlag = False Then
+            PlcWrite(LinkAddressPlcMonitor, 0)
+        End If
         frmPlcMonitor.Hide()
     End Sub
 
